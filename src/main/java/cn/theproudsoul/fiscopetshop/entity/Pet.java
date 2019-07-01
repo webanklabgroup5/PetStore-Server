@@ -6,7 +6,7 @@ public class Pet{
     private int species;
     private String birthday;
     private String description;
-    private int state; // 0:上架；1:下架
+    private boolean status; // 0:上架；1:下架
     private int price;
     private String imgUrl;
 
@@ -50,12 +50,12 @@ public class Pet{
         this.description = description;
     }
 
-    public int getState() {
-        return state;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public int getPrice() {
