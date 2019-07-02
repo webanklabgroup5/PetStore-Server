@@ -1,13 +1,11 @@
 package cn.theproudsoul.fiscopetshop.controller;
 
-import cn.theproudsoul.fiscopetshop.entity.User;
 import cn.theproudsoul.fiscopetshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.*;
-import util.Utils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +14,7 @@ import java.util.Map;
 
 @SpringBootApplication
 @RestController
-public class PetshopController{
+public class UserController{
 
 	@Autowired
 	private UserService userService;
@@ -31,7 +29,6 @@ public class PetshopController{
     @PostMapping(value = "/login",consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
  	@ResponseBody
  	public String login(@RequestBody Map<String, String> map, HttpServletRequest request, HttpServletResponse response) throws JSONException {
- //		response.setHeader("Access-Control-Allow-Origin", "127.0.0.1:3000");//跨域访问
  		String userType = map.get("type");
  		String user_key=map.get("user_key");
 
@@ -50,7 +47,19 @@ public class PetshopController{
  		return res.toJSONString();
  	}
 
- 	@GetMapping("/")
+	@RequestMapping(value = "/logout", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+
+		HttpSession session=request.getSession();
+		session.invalidate();
+
+		JSONObject res=new JSONObject();
+		res.put("status", "1");
+		return res.toJSONString();
+	}
+
+ 	@GetMapping(value = "/",  produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String home(HttpServletRequest request){
 		HttpSession session=request.getSession();
@@ -80,9 +89,9 @@ public class PetshopController{
 			// 生成用户addUser，用cookie把？
 			String user = userService.addUser(userName,Integer.parseInt(credit));
 			if (user==null){
-				res.put("status", "1");
+				res.put("status", 1);
 			}else {
-				res.put("status","0");
+				res.put("status",0);
 				res.put("user_key", user);
 			}
 		}

@@ -1,0 +1,25 @@
+encrypt-type: # 0:standard, 1:guomi
+ encrypt-type: 0 
+ 
+group-channel-connections-config:
+  all-channel-connections:
+  - group-id: 1  #group ID
+    connections-str:
+                    - ali.theproudsoul.cn:20200  # node listen_ip:channel_listen_port
+                    - ali.theproudsoul.cn:20201
+  - group-id: 2  
+    connections-str:
+                    - 127.0.0.1:20202  # node listen_ip:channel_listen_port
+                    - 127.0.0.1:20203
+ 
+channel-service:
+  group-id: 1 # The specified group to which the SDK connects
+  agency-name: fisco # agency name
+
+user-key:
+  user-key: 3bed914595c159cbce70ec5fb6aff3d6797e0c5ee5a7a9224a21cae8932d84a4
+
+contract-address:
+  account: 8082544a3aebd99d3d252eb61cdaf0adae95b8df
+  pet-market: b5edb2cc201ba59fc6c94e6e20b892461d7d4cd4
+  transaction: 4ff6cf07ca27bfd62cb0db7c444dee08d21dd069

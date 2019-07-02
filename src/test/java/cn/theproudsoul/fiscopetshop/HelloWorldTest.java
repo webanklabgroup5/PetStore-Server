@@ -25,10 +25,10 @@ public class HelloWorldTest {
     @Test
     public void testHelloController() throws Exception {
 
-         mockMvc.perform(get("/")) //请求方式+地址
+         mockMvc.perform(get("/transaction")) //请求方式+地址
                 .andDo(print()) //打印效果
                 .andExpect(status().isOk()) //预期状态
-                .andExpect(content().string(containsString("Hello World")));
+                .andExpect(content().string(containsString("Hello World!")));
     }
 
 }

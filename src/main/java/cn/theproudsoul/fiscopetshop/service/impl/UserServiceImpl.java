@@ -1,18 +1,29 @@
 package cn.theproudsoul.fiscopetshop.service.impl;
 
-import cn.theproudsoul.fiscopetshop.entity.Admin;
-import cn.theproudsoul.fiscopetshop.entity.Judges;
-import cn.theproudsoul.fiscopetshop.entity.Market;
-import cn.theproudsoul.fiscopetshop.entity.User;
+import cn.theproudsoul.fiscopetshop.entity.*;
+import cn.theproudsoul.fiscopetshop.service.TransactionService;
 import cn.theproudsoul.fiscopetshop.service.UserService;
+import cn.theproudsoul.fiscopetshop.solidity.Account;
+import cn.theproudsoul.fiscopetshop.solidity.PetMarket;
+import cn.theproudsoul.fiscopetshop.solidity.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.UserKeyUtils;
-import util.Utils;
 
-import java.util.concurrent.ExecutionException;
+import java.math.BigInteger;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    Account accountContract;
+    @Autowired
+    Transaction transactionContract;
+    @Autowired
+    PetMarket petMarketContract;
+    @Autowired
+    private TransactionService transactionService;
+
     @Override
     public String addUser(String userName, int initCredit) {
         UserKeyUtils userKeyUtils = new UserKeyUtils();
@@ -25,16 +36,6 @@ public class UserServiceImpl implements UserService {
         }
 
         return user_key;
-    }
-
-    @Override
-    public int getIouLimit(String orgID) {
-        return 0;
-    }
-
-    @Override
-    public boolean recycleIou(String iouId, int amount) throws InterruptedException, ExecutionException {
-        return false;
     }
 
     @Override
@@ -70,11 +71,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Admin getAdminByKey(String userKey) {
-        // 区块链查询
-//        Market market;
-//        Judges judges;
+        int transactionCount=0;
+        int petCount=0;
+        try {
+            transactionCount=transactionContract.getRecordCount().send().intValue();
+            petCount=petMarketContract.getSalingPetCounts().send().intValue();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        Market market = new Market(transactionCount,petCount);
 
-        Admin admin = new Admin();
+        Orders orderList = new Orders();
+        try {
+            List<BigInteger> orderIndex = transactionContract.getAllArbitrations().send();
+            orderList = transactionService.getOrdersByOrderId(orderIndex);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Admin admin = new Admin(market, orderList);
         return admin;
     }
 }
