@@ -9,6 +9,7 @@ public class Pet{
     private boolean status; // 0:上架；1:下架
     private int price;
     private String imgUrl;
+    private String up_time;
 
     public String getPetId() {
         return petId;

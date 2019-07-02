@@ -4,9 +4,18 @@ import java.math.BigInteger;
 
 public class Order {
     private String id;
-    private int trade_status;
+    private int tradeStatus;
     private int price;
-    private String pet_id;
+    private String petId;
+    private String date;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public void setPrice(int price) {
         this.price = price;
@@ -16,12 +25,12 @@ public class Order {
         this.id = id;
     }
 
-    public void setTrade_status(int trade_status) {
-        this.trade_status = trade_status;
+    public void setTradeStatus(int tradeStatus) {
+        this.tradeStatus = tradeStatus;
     }
 
-    public void setPet_id(String pet_id) {
-        this.pet_id = pet_id;
+    public void setPetId(String pet_id) {
+        this.petId = petId;
     }
 
 

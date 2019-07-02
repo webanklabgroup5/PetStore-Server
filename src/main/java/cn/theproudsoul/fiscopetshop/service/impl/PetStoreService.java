@@ -6,6 +6,7 @@ import cn.theproudsoul.fiscopetshop.solidity.Account;
 import cn.theproudsoul.fiscopetshop.solidity.PetMarket;
 import cn.theproudsoul.fiscopetshop.solidity.Transaction;
 import org.fisco.bcos.web3j.tuples.generated.Tuple5;
+import org.fisco.bcos.web3j.tuples.generated.Tuple6;
 import org.fisco.bcos.web3j.tuples.generated.Tuple7;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,11 @@ public class PetStoreService {
             Order order = new Order();
             order.setId(String.valueOf(i));
             try {
-                Tuple5<String, String, BigInteger, BigInteger, BigInteger> order_tuple = transactionContract.getRecordById(i).send();
-                order.setPet_id(String.valueOf(order_tuple.getValue3()));
+                Tuple6<String, String, BigInteger, BigInteger, BigInteger, String> order_tuple = transactionContract.getRecordById(i).send();
+                order.setPetId(String.valueOf(order_tuple.getValue3()));
                 order.setPrice(order_tuple.getValue4().intValue());
+                order.setTradeStatus(order_tuple.getValue5().intValue());
+                order.setDate(order_tuple.getValue6());
             }catch (Exception e){
                 e.printStackTrace();
             }

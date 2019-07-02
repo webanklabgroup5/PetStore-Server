@@ -11,51 +11,50 @@ public class User{
     @GeneratedValue
     private Long id;
 
-    @Column(name="userName")
+    @Column(name="user_name")
     private String userName;
 
-    @Column(name="userKey")
+    @Column(name="user_key")
     private String userKey;
 
     @Column(name="password")
     private String password;
 
-    @Column(name="remainingCredit")
-    private int remainingCredit;
+    @Column(name="credit")
+    private int credit;
 
-    public User(String userName, String userKey, String password, int remainingCredit) {
-        this.userName = userName;
-        this.userKey = userKey;
-        this.password=password;
-        this.remainingCredit = remainingCredit;
+    public Long getId() {
+        return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public String toString() {
-        return String.format("User [id=%d, userName=%s, userKey=%s, password=%s, remainingCredit=%d]", id, userName, userKey, password, remainingCredit);
+        return String.format("User [id=%d, userName=%s, userKey=%s, password=%s, remainingCredit=%d]", id, userName, userKey, password, credit);
     }
 
     public String getPassword() {
         return password;
     }
 
-    public int getRemainingCredit() {
-        return remainingCredit;
+    public int getCredit() {
+        return credit;
     }
 
-    public void setRemainingCredit(int remainingCredit) {
-        this.remainingCredit = remainingCredit;
+    public void setCredit(int credit) {
+        this.credit = credit;
     }
-
-//    public String getUserKey() {
-//        return userKey;
-//    }
-//
-//    public void setUserKey(String password) {
-//        this.userKey = userKey;
-//    }
-
 
     public String getUserName() {
         return userName;
@@ -65,11 +64,4 @@ public class User{
         this.userName = userName;
     }
 
-//    public Pets getPetList() {
-//        return petList;
-//    }
-//
-//    public void setPetList(Pets petList) {
-//        this.petList = petList;
-//    }
 }

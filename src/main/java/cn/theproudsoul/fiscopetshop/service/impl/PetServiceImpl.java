@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.fisco.bcos.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import util.Utils;
 
 import java.math.BigInteger;
 
@@ -38,8 +39,8 @@ public class PetServiceImpl implements PetService {
     @Override
     public boolean petOn(String userKey, String id, int price) throws Exception {
         // 计算上架时间now
-
-        TransactionReceipt receipt = petMarketContract.sellPet(new BigInteger(id),BigInteger.valueOf(price)).send();
+        String now = Utils.sdf(System.currentTimeMillis());
+        TransactionReceipt receipt = petMarketContract.sellPet(new BigInteger(id),BigInteger.valueOf(price),now).send();
         return false;
     }
 }

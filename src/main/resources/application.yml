@@ -20,18 +20,22 @@ user-key:
   user-key: 3bed914595c159cbce70ec5fb6aff3d6797e0c5ee5a7a9224a21cae8932d84a4
 
 contract-address:
-  account: 0x8082544a3aebd99d3d252eb61cdaf0adae95b8df
-  pet-market: 0xb5edb2cc201ba59fc6c94e6e20b892461d7d4cd4
-  transaction: 0x4ff6cf07ca27bfd62cb0db7c444dee08d21dd069
+  account: a89f9ec94ef8487ae5aabb1654bbd50653e341a3
+  pet-market: 8ea1bebb14ffd73a1605c0f7afd186f42b424593
+  transaction: 6bd1a10900ed1a2a403e8c66d8aa65dc6531ee22
 
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/test
+    url: jdbc:mariadb://127.0.0.1:3306/test
     username: root
     password: zyj971213
     driver-class-name: org.mariadb.jdbc.Driver
     database-platform: org.hibernate.dialect.H2Dialect
-    type-aliases-package: cn.theproudsoul.fiscopetstop.mapper
+    type-aliases-package: cn.theproudsoul.fiscopetstop.repository
+    initialization-mode: always
+    schema: schema.sql
+    data: data.sql
+    sql-script-encoding: utf-8
 
   h2:
     console:

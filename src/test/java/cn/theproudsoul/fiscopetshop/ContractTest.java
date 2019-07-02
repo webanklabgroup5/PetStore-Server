@@ -56,7 +56,6 @@ public class ContractTest extends DemoApplicationTests{
     public void testContract() {
         try {
             System.out.println( PetMarket.getAddress().send());
-            System.out.println( Account.getAddress().send());
         } catch (Exception e) {
             e.printStackTrace();
         }

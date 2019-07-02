@@ -10,8 +10,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import util.Utils;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -24,9 +27,14 @@ public class UserTest {
 
     @Test
     public void testTime() throws Exception{
-        long now=System.currentTimeMillis();
-        String time = Utils.sdf(now);
+        String time = Utils.sdf(System.currentTimeMillis());
         System.out.println(time);
+    }
+
+    @Test
+    public void testApplicant() throws Exception {
+        mockMvc.perform(get("/applylist")).andDo(print())
+                .andExpect(content().string(containsString("apply_list")));
     }
 
     @Test
