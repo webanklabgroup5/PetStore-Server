@@ -1,16 +1,43 @@
 package cn.theproudsoul.fiscopetshop.entity;
 
 
-public class User{
-    private String userName;
-    //private String userKey;
-    private int remainingCredit;
-    private Pets petList;
+import javax.persistence.*;
 
-    public User(String userName, int remainingCredit) {
+@Entity
+@Table(name="user")
+public class User{
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(name="userName")
+    private String userName;
+
+    @Column(name="userKey")
+    private String userKey;
+
+    @Column(name="password")
+    private String password;
+
+    @Column(name="remainingCredit")
+    private int remainingCredit;
+
+    public User(String userName, String userKey, String password, int remainingCredit) {
         this.userName = userName;
-        //this.userKey = userKey;
+        this.userKey = userKey;
+        this.password=password;
         this.remainingCredit = remainingCredit;
+    }
+
+
+    @Override
+    public String toString() {
+        return String.format("User [id=%d, userName=%s, userKey=%s, password=%s, remainingCredit=%d]", id, userName, userKey, password, remainingCredit);
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public int getRemainingCredit() {
@@ -38,11 +65,11 @@ public class User{
         this.userName = userName;
     }
 
-    public Pets getPetList() {
-        return petList;
-    }
-
-    public void setPetList(Pets petList) {
-        this.petList = petList;
-    }
+//    public Pets getPetList() {
+//        return petList;
+//    }
+//
+//    public void setPetList(Pets petList) {
+//        this.petList = petList;
+//    }
 }

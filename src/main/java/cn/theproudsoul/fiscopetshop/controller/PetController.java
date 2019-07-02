@@ -33,7 +33,12 @@ public class PetController {
         String photo = map.get("photo");
         String birthday = map.get("birthday");
         String description = map.get("description");
-        boolean status = petService.petAdd(user_key,name,species,photo,birthday,description);
+        boolean status = false;
+        try {
+            status = petService.petAdd(user_key,name,species,photo,birthday,description);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JSONObject res=new JSONObject();
         if (status){
             res.put("status","1");
@@ -54,7 +59,12 @@ public class PetController {
 
         String id = map.get("id");
         int price = Integer.parseInt(map.get("price"));
-        boolean status = petService.petOn(user_key, id, price);
+        boolean status = false;
+        try {
+            status = petService.petOn(user_key, id, price);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JSONObject res=new JSONObject();
         if (status){
             res.put("status","1");
@@ -74,7 +84,12 @@ public class PetController {
 
         // 调用PetMarket合约接口 buyPet(uint _petId)
         String id = map.get("id");
-        boolean status = petService.petDown(user_key,id);
+        boolean status = false;
+        try {
+            status = petService.petDown(user_key,id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JSONObject res=new JSONObject();
         if (status){
             res.put("status","1");

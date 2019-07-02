@@ -54,9 +54,12 @@ public class ContractTest extends DemoApplicationTests{
 
     @Test
     public void testContract() {
-        System.out.println("PetMarket is null?" + PetMarket==null);
-        System.out.println("Account is null?" + Account==null);
-        System.out.println("Transaction is null?" + Transaction==null);
+        try {
+            System.out.println( PetMarket.getAddress().send());
+            System.out.println( Account.getAddress().send());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 //    @Test

@@ -30,16 +30,17 @@ public class UserController{
  	@ResponseBody
  	public String login(@RequestBody Map<String, String> map, HttpServletRequest request, HttpServletResponse response) throws JSONException {
  		String userType = map.get("type");
- 		String user_key=map.get("user_key");
+ 		String userName=map.get("user_name");
+		String passwd=map.get("passwd");
 
  		//登录操作checkPassword
- 		int isSuccess= userService.checkPassword(Integer.parseInt(userType),user_key);
+ 		int isSuccess= userService.checkPassword(Integer.parseInt(userType),userName,passwd);
 		
  		JSONObject res=new JSONObject();
  		if(isSuccess==0) {
  			res.put("status", "0");
  			HttpSession session=request.getSession();
- 			session.setAttribute("user", user_key);
+ 			session.setAttribute("user", userName);
 			session.setAttribute("role", userType);
  		}
  		else
@@ -61,15 +62,14 @@ public class UserController{
 
  	@GetMapping(value = "/",  produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String home(HttpServletRequest request){
+	public String home(HttpServletRequest request) throws Exception {
 		HttpSession session=request.getSession();
 		JSONObject res=new JSONObject();
 		int role = (int) session.getAttribute("role");
-		String user_key = (String) session.getAttribute("user");
 		if (role==0){
-			res.toJSONString(userService.getAdminByKey(user_key));
+			res.toJSONString(userService.getAdmin());
 		}else {
-			res.toJSONString(userService.getUserByKey(user_key));
+			res.toJSONString(userService.getUserInfo());
 		}
 		return res.toJSONString();
 	}
@@ -84,10 +84,11 @@ public class UserController{
 			res.put("status", "1");
 			res.put("error_msg", "权限不足");
 		}else {
-			String userName = map.get("user");
+			String userName = map.get("user_name");
+			String passwd = map.get("passwd");
 			String credit=map.get("credit");
 			// 生成用户addUser，用cookie把？
-			String user = userService.addUser(userName,Integer.parseInt(credit));
+			String user = userService.addUser(userName,passwd,Integer.parseInt(credit));
 			if (user==null){
 				res.put("status", 1);
 			}else {

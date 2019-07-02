@@ -23,3 +23,12 @@ contract-address:
   account: 8082544a3aebd99d3d252eb61cdaf0adae95b8df
   pet-market: b5edb2cc201ba59fc6c94e6e20b892461d7d4cd4
   transaction: 4ff6cf07ca27bfd62cb0db7c444dee08d21dd069
+
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/test
+    username: root
+    password: zyj971213
+    driver-class-name: org.mariadb.jdbc.Driver
+    database-platform: org.hibernate.dialect.H2Dialect
+    type-aliases-package: cn.theproudsoul.fiscopetstop.mapper

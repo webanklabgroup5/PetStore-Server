@@ -1,7 +1,5 @@
 package cn.theproudsoul.fiscopetshop.service.impl;
 
-import cn.theproudsoul.fiscopetshop.constants.GasConstants;
-import cn.theproudsoul.fiscopetshop.entity.Order;
 import cn.theproudsoul.fiscopetshop.entity.Orders;
 import cn.theproudsoul.fiscopetshop.entity.Pet;
 import cn.theproudsoul.fiscopetshop.entity.Pets;
@@ -9,7 +7,6 @@ import cn.theproudsoul.fiscopetshop.service.TransactionService;
 import cn.theproudsoul.fiscopetshop.solidity.Account;
 import cn.theproudsoul.fiscopetshop.solidity.PetMarket;
 import cn.theproudsoul.fiscopetshop.solidity.Transaction;
-import org.fisco.bcos.web3j.tuples.generated.Tuple5;
 import org.fisco.bcos.web3j.tuples.generated.Tuple7;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,8 @@ public class TransactionServiceImpl implements TransactionService {
     Transaction transactionContract;
     @Autowired
     PetMarket petMarketContract;
+    @Autowired
+    private PetStoreService petStoreService;
 
     @Override
     public int transaction(String userKey, String petId){
@@ -35,29 +34,13 @@ public class TransactionServiceImpl implements TransactionService {
         return 0;
     }
 
-    public Orders getOrdersByOrderId(List<BigInteger> orderIndex){
-        Orders orderList = new Orders();
-        for(BigInteger i: orderIndex){
-            Order order = new Order();
-            order.setId(String.valueOf(i));
-            try {
-                Tuple5<String, String, BigInteger, BigInteger, BigInteger> order_tuple = transactionContract.getRecordById(i).send();
-                order.setPet_id(String.valueOf(order_tuple.getValue3()));
-                order.setPrice(order_tuple.getValue4().intValue());
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            orderList.getOrderList().add(order);
-        }
-        return orderList;
-    }
 
     @Override
     public Orders getOrdersByUserId(String userKey) {
-        Orders orderList = null;
+        Orders orderList = new Orders();
         try {
             List<BigInteger> orderIndex = transactionContract.getMyRecords().send();
-            orderList = getOrdersByOrderId(orderIndex);
+            orderList.setOrderList(petStoreService.getOrdersByOrderId(orderIndex));
         } catch (Exception e){
             e.printStackTrace();
         }

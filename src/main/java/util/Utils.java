@@ -119,7 +119,7 @@ public class Utils {
      * simpleDateFormat统一格式化时间
      */
     public static String sdf(Object object) {
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
         return simpleDateFormat.format(object);
     }
 

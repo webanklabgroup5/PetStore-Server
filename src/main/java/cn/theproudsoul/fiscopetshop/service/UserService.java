@@ -5,11 +5,12 @@ import cn.theproudsoul.fiscopetshop.entity.User;
 
 
 public interface UserService {
-    String addUser(String userName, int initCredit); // 新增用户
 
-    int checkPassword(int type, String userKey);//检查password
+    String addUser(String userName, String passwd, int initCredit); // 新增用户
 
-    User getUserByKey(String userKey);//根据用户的ID来返回用户的信息
+    int checkPassword(int type, String name, String passwd);//检查password
 
-    Admin getAdminByKey(String userKey);
+    User getUserInfo() throws Exception;
+
+    Admin getAdmin();
 }
