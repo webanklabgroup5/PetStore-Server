@@ -6,14 +6,14 @@ contract Account{
 
 contract PetMarket{
     function getPetById(uint _petId) external view returns(
-        bool saling,//status
+        bool selling,//status
         //uint ID;
         uint16 species,
         uint32 price,
         string name,
         string bday,
         string disc,
-        string picUrl
+        string time
     );
     function changeOwnership(address _sender, uint _petId, address _newOwner) external;
 }
@@ -25,7 +25,8 @@ contract Transaction{
         address seller;
         uint petId;
         uint price;
-        uint status; //0 for normal, 1 for arbitrating, 20 for arbitrated fail, 21 for arbitrated success
+        uint status;
+        string time;//0 for normal, 1 for arbitrating, 20 for arbitrated fail, 21 for arbitrated success
     }
     
     Record[] records;
@@ -57,12 +58,12 @@ contract Transaction{
     } 
     
     function makePurchase(address _sender, address _buyer, address _seller,
-                            uint32 _price, uint _petId) external onlyAdmin(_sender) {
+                            uint32 _price, uint _petId, string _time) external onlyAdmin(_sender) {
         require(_sender == admin, "not admin!");
         //uint _price;
-        //(, , _price, , , , ) = petContract.getPetById(_petId);
+        //(, , _price, , , , ,) = petContract.getPetById(_petId);
         accountContract._transfer(_sender, _buyer, _seller, _price);
-        records.push(Record(_buyer, _seller, _petId, _price, 0));
+        records.push(Record(_buyer, _seller, _petId, _price, 0, _time));
         myRecordCount[_buyer]++;
         myRecordCount[_seller]++;
     }
@@ -84,16 +85,18 @@ contract Transaction{
                 address seller,
                 uint petId,
                 uint price,
-                uint status){
+                uint status,
+                string time){
         return (records[_recordId].buyer,
 		        records[_recordId].seller,
 		        records[_recordId].petId,
 		        records[_recordId].price,
-		        records[_recordId].status);
+		        records[_recordId].status,
+		        records[_recordId].time);
     }
     
     function requestArbitration(uint _recordId) public {
-        require(msg.sender == records[_recordId].buyer);
+        require(msg.sender == records[_recordId].buyer||msg.sender == records[_recordId].seller);
         require(records[_recordId].status == 0);
         records[_recordId].status = 1;
         arbitCount++;

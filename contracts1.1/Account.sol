@@ -35,19 +35,35 @@ contract Account{
         balance[_address] = balance[_address] + _money;
     }
     
-    function getAddress() public view returns (address) {
-        return msg.sender;
-    }
-    
     function isAdmin() public returns (bool) {
         return (admin == msg.sender);
     }
     
-    function setName(string _name) public {
+    function setName(address _address, string _name) public onlyAdmin(msg.sender){
+        name[_address] = _name;
+    }
+    
+    function getName(address _address) public view returns(string) {
+        return name[_address];
+    }
+    
+    function myName() public view returns(string) {
+        return name[msg.sender];
+    }
+    
+    function myBalance() public view returns(uint) {
+        return balance[msg.sender];
+    }
+    
+    function myAddress() public view returns(address) {
+        return msg.sender;
+    }
+    
+    function setMyName(string _name) public {
         name[msg.sender] = _name;
     } 
     
-    function getName() public view returns(string) {
+    function getMyName() public view returns(string) {
         return name[msg.sender];
     }
 }
