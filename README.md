@@ -81,7 +81,8 @@
 - 买卖家信息提取(Done)
 - user模块中的seller
 - pet全部加上owner(Done)
-- 文件上传映射 "http://ali.theproudsoul.cn:22222/petshop/pet/"到"/home/petshop/pet/"
+- 文件上传映射 (Done)
+- 重新编写sql将user表中credit字段删除
 
 ## 问题
 

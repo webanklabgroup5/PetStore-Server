@@ -24,8 +24,8 @@ public class PetController {
     private PetService petService;
     @Autowired private PetStoreService petStoreService;
 
-    private String basePath="/home/petshop/tmp/pet/"; // 图片储存根目录
-    private String accessUrl = "http://ali.theproudsoul.cn:22222/petshop/";
+    private String basePath="/home/petshop/pet/"; // 图片储存根目录
+    private String accessUrl = "http://ali.theproudsoul.cn:22222/petshop/pet/";
 
     @PostMapping(value = "/petadd", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -113,7 +113,7 @@ public class PetController {
 
         long now=System.currentTimeMillis();
         String filePath = basePath;
-        File dest = new File(filePath + now +"."+suffixName);
+        File dest = new File(filePath + now +suffixName);
         System.out.println("上传文件的文件夹位置为 "+filePath);
         System.out.println("fileName："+file.getOriginalFilename());
 
@@ -121,7 +121,7 @@ public class PetController {
             file.transferTo(dest);
             log.info("上传成功后的文件路径：" + filePath + fileName);
             res.put("status","1");
-            res.put("url",accessUrl + fileName);
+            res.put("url",accessUrl + now+suffixName);
             return res.toJSONString();
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
