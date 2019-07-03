@@ -6,10 +6,37 @@ public class Pet{
     private int species;
     private String birthday;
     private String description;
-    private boolean status; // 0:上架；1:下架
+    private boolean status; // 0:下架；1:上架
     private int price;
+    private String remark;
     private String imgUrl;
-    private String up_time;
+    private String upTime;
+    private User owner;
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getUpTime() {
+        return upTime;
+    }
+
+    public void setUpTime(String upTime) {
+        this.upTime = upTime;
+    }
+
 
     public String getPetId() {
         return petId;

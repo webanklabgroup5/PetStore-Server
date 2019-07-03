@@ -41,10 +41,13 @@ public class UserTest {
     public void testLoginController() throws Exception {
 
         mockMvc.perform(post("/login")
-        .content("{\"type\":\"1\",\"user\":\"TheProudSoul\",\"passwd\":\"zyj971213\"}")
+        .content("{\"type\":\"1\",\"user_name\":\"lhl\",\"password\":\"lhllhl\"}")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8))//请求方式+地址
+                .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.status", is("0")));
+                .andExpect(jsonPath("$.status", is("1")));
+        mockMvc.perform(get("/test")).andDo(print());
+
     }
 }

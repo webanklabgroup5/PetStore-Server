@@ -20,9 +20,9 @@ user-key:
   user-key: 3bed914595c159cbce70ec5fb6aff3d6797e0c5ee5a7a9224a21cae8932d84a4
 
 contract-address:
-  account: a89f9ec94ef8487ae5aabb1654bbd50653e341a3
-  pet-market: 8ea1bebb14ffd73a1605c0f7afd186f42b424593
-  transaction: 6bd1a10900ed1a2a403e8c66d8aa65dc6531ee22
+  account: 98177ee51e5b722567b11b6a824cc27ce3183229
+  pet-market: 7fded89c9cbb66a716fca6b3717e3e2bbce9c162
+  transaction: d3212bee7257ed1aff82f1ba68cb5c0c3b83b266
 
 spring:
   datasource:
@@ -33,8 +33,6 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     type-aliases-package: cn.theproudsoul.fiscopetstop.repository
     initialization-mode: always
-    schema: schema.sql
-    data: data.sql
     sql-script-encoding: utf-8
 
   h2:

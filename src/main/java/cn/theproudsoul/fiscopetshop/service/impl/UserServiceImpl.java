@@ -9,6 +9,8 @@ import cn.theproudsoul.fiscopetshop.solidity.Account;
 import cn.theproudsoul.fiscopetshop.solidity.PetMarket;
 import cn.theproudsoul.fiscopetshop.solidity.Transaction;
 import lombok.extern.slf4j.Slf4j;
+import org.fisco.bcos.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.UserKeyUtils;
 import util.Utils;
@@ -21,27 +23,23 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
-    private final Account accountContract;
-    private final Transaction transactionContract;
-    private final PetMarket petMarketContract;
-    private final PetStoreService petStoreService;
-    private final UserRepository userRepository;
-    private final ApplicantRepository applicantRepository;
+    @Autowired
+    private ContractService contractService;
 
-    public UserServiceImpl(Account accountContract, Transaction transactionContract, PetMarket petMarketContract, PetStoreService petStoreService, UserRepository userRepository, ApplicantRepository applicantRepository) {
-        this.accountContract = accountContract;
-        this.transactionContract = transactionContract;
-        this.petMarketContract = petMarketContract;
-        this.petStoreService = petStoreService;
-        this.userRepository = userRepository;
-        this.applicantRepository = applicantRepository;
-    }
+    @Autowired
+    private  PetStoreService petStoreService;
+    @Autowired
+    private  UserRepository userRepository;
+    @Autowired
+    private  ApplicantRepository applicantRepository;
 
     @Override
     public int auditUser(String userId, boolean isAgree) {
         Optional<Applicant> applicantOpt = applicantRepository.findById(Long.valueOf(userId));
-        if (applicantOpt.isPresent()) {
-            Applicant applicant = applicantOpt.get();
+        Applicant applicant;
+        if (!applicantOpt.isPresent()) return 2;
+        else applicant = applicantOpt.get();
+        if (isAgree){ // 同意申请
             User user = userRepository.findByUserName(applicant.getUserName());
             if (user==null) {
                 // 数据库中不存在可以操作
@@ -50,19 +48,21 @@ public class UserServiceImpl implements UserService {
                 String address = userKeyUtils.getAddress();
                 try {
                     // 将名字、积分、地址写进区块链
-
+                    TransactionReceipt receipt = contractService.getAccountContract().newAccount(address, BigInteger.valueOf(user.getCredit())).send();
                 } catch (Exception e){
                     e.printStackTrace();
                 }
                 user = new User();
                 user.setUserName(applicant.getUserName());
+                user.setUserKey(key);
                 user.setPassword(Utils.getSHA256Str(applicant.getPassword()));
-                user.setCredit(applicant.getCredit());
                 userRepository.save(user);
+                applicantRepository.deleteById(applicant.getId());
                 return 1;
             } else return 0; // 用户名已存在
-        } else {
-            return 2; // 没有该申请信息
+        } else { // 拒绝
+            applicantRepository.deleteById(applicant.getId());
+            return 1;
         }
     }
 
@@ -95,19 +95,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public long checkPassword(int type, String name, String passwd) {
-        if (type==1) {
-            // 是否对应admin
-
-        }
-        User tmp = userRepository.findByUserName(name);
+    public long checkPassword(int type, String userName, String passwd) {
+        User tmp = userRepository.findByUserName(userName);
         if(tmp == null) {
             //不存在该用户
             log.info("用户不存在");
             return -1;
         } else {
             String password = tmp.getPassword();
-            if (Utils.getSHA256Str(password).equals(passwd)){
+            log.info(password);
+//            if (Utils.getSHA256Str(password).equals(passwd)){
+            if (password.equals(passwd)){
                 System.out.println("密码正确");
                 return tmp.getId();
             }
@@ -121,17 +119,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserInfo() throws Exception {
 
-        String name = accountContract.getMyName().send();
+        //String name = accountContract.getMyName().send();
+        String name ="test";
         User user = userRepository.findByUserName(name);
         // 区块链查询
         BigInteger credit = new BigInteger("1000");
         user.setCredit(credit.intValue());
 
-        Pets petList = new Pets();
-        List<BigInteger> petIndex = petMarketContract.getMyPets().send();
-        petList.setPetList(petStoreService.getPetsByPetId(petIndex));
+        List<Pet> petList = null;
+        List<BigInteger> petIndex = contractService.getPetMarketContract().getMyPets().send();
+        petList = petStoreService.getPetsByPetId(petIndex);
+        if (petList==null) petList = new ArrayList<>();
 
-        //user.setPetList(petList);
+
         return user;
     }
 
@@ -153,11 +153,5 @@ public class UserServiceImpl implements UserService {
     public List<Pet> getPetListByUserName(String name) {
         // 在区块链上根据用户名查找宠物列表
         return null;
-    }
-
-    @Override
-    public boolean isAdmin() throws Exception {
-        //return accountContract.isAdmin().send();
-        return true;
     }
 }

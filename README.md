@@ -72,6 +72,24 @@
 - 数据库应只保存用户名和密码，不应保存credit
 
 ## 未完成
-- pet竖向切割
+
+- pet竖向切割(Done: 改为合约操作)
 - 研究拦截器进行权限匹配
-- 是否去除复数实体
+- 是否去除复数实体(Done)
+- 提取重复petlistjson为函数(Done)
+- petlist分页(Done)
+- 买卖家信息提取(Done)
+- user模块中的seller
+- pet全部加上owner(Done)
+- 文件上传映射 "http://ali.theproudsoul.cn:22222/petshop/pet/"到"/home/petshop/pet/"
+
+## 问题
+
+1. 宠物上架没有价格(Solve)
+2. 宠物种类使用int吗(Solve)
+3. 交易时间和上架时间(Solve)
+
+## 合约需求
+
+1. 需要根据用户名查找用户id或者petlist(Achieve)
+2. 管理员添加用户(Achieve)

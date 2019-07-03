@@ -1,13 +1,54 @@
 package cn.theproudsoul.fiscopetshop.entity;
 
-import java.math.BigInteger;
-
 public class Order {
     private String id;
-    private int tradeStatus;
-    private int price;
-    private String petId;
+    private User buyer;
+    private User seller;
+    private int status; // 0:买完，1:申请仲裁，21:同意，20:拒绝
+    private Pet pet;
     private String date;
+    private int price;
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
+
+    public User getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(User buyer) {
+        this.buyer = buyer;
+    }
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getPrice() {
+        return price;
+    }
 
     public String getDate() {
         return date;
@@ -25,23 +66,4 @@ public class Order {
         this.id = id;
     }
 
-    public void setTradeStatus(int tradeStatus) {
-        this.tradeStatus = tradeStatus;
-    }
-
-    public void setPetId(String pet_id) {
-        this.petId = petId;
-    }
-
-
-//    "trade_id":1,
-//            "trade_status":0,
-//            "pet_id":1,
-//            "pet_name":"miao",
-//            "pet_species":2,
-//            "birthday":"20190201",
-//            "description":"This is a good cat",
-//            "price":100,
-//            "date":"20190301",
-//            "img_url":"http://aaaaa"
 }

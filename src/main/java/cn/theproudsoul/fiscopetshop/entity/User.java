@@ -17,11 +17,26 @@ public class User{
     @Column(name="user_key")
     private String userKey;
 
+    public String getUserKey() {
+        return userKey;
+    }
+
     @Column(name="password")
     private String password;
 
-    @Column(name="credit")
+    @Transient
     private int credit;
+
+    @Column(name = "address")
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public Long getId() {
         return id;

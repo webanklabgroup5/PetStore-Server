@@ -4,10 +4,10 @@ import cn.theproudsoul.fiscopetshop.entity.Applicant;
 import cn.theproudsoul.fiscopetshop.entity.Pet;
 import cn.theproudsoul.fiscopetshop.entity.User;
 import cn.theproudsoul.fiscopetshop.service.UserService;
+import cn.theproudsoul.fiscopetshop.service.impl.ContractService;
+import cn.theproudsoul.fiscopetshop.service.impl.PetStoreService;
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,49 +17,45 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
-@SpringBootApplication
 @RestController
 public class UserController{
 
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private PetStoreService petStoreService;
+
+	@Autowired private ContractService contractService;
+
     @PostMapping(value = "/login",consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
  	@ResponseBody
- 	public String login(@RequestBody Map<String, String> map, HttpServletRequest request, HttpServletResponse response) throws JSONException {
+ 	public String login(@RequestBody Map<String, String> map, HttpServletRequest request, HttpServletResponse response) throws Exception {
  		String userType = map.get("type");
  		String userName=map.get("user_name");
 		String password=map.get("password");
+		JSONObject res=new JSONObject();
+		if (userType==null||userName==null||password==null){
+			res.put("status","0");
+			res.put("error_msg", "缺少参数……");
+		}
 
  		//登录操作checkPassword
  		long id= userService.checkPassword(Integer.parseInt(userType),userName,password);
-		
- 		JSONObject res=new JSONObject();
+
  		if(id!=-1) {
  			res.put("status", "1");
- 			JSONObject userObject = new JSONObject();
- 			userObject.put("id",id);
  			User user = userService.getUserById(String.valueOf(id));
+			JSONObject userObject =petStoreService.userJSON(user);
+			userObject.put("id",id);
  			userObject.put("user_name",userName);
-			userObject.put("credit",user.getCredit());
+			//userObject.put("credit",user.getCredit());
 			userObject.put("type", userType);
 			List<Pet> petList = userService.getPetListByUserName(userName);
-			JSONArray petListJson = new JSONArray();
-			for (Pet pet:petList){
-				JSONObject petJson = new JSONObject();
-				petJson.put("id",pet.getPetId());
-				petJson.put("name",pet.getName());
-				petJson.put("species",String.valueOf(pet.getSpecies()));
-				petJson.put("status",String.valueOf(pet.isStatus()));
-				petJson.put("birthday",pet.getBirthday());
-				petJson.put("price", String.valueOf(pet.getPrice()));
-				petJson.put("description",pet.getDescription());
-				petJson.put("img_url",pet.getImgUrl());
-				petListJson.add(petJson);
-			}
+			JSONArray petListJson = petStoreService.petsJson(petList,0,10);
 			userObject.put("pet_list",petListJson);
-
 			res.put("user",userObject);
+			contractService.setCredentials(user.getUserKey());
 		} else {
  			res.put("status", "0");
  			res.put("error_msg","用户名或密码错误");
@@ -67,11 +63,18 @@ public class UserController{
  		return res.toJSONString();
  	}
 
+ 	@GetMapping(value = "/test")
+	@ResponseBody
+	public String test() throws Exception {
+    	return contractService.getAccountContract().myAddress().send();
+	}
+
  	@GetMapping(value = "/userlist", produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String userList(@RequestParam(value="limit",required = false,defaultValue = "10") int limit,
 						   @RequestParam(value="offset",required = false,defaultValue = "0") int offset){
-		List<User> userList = userService.userList();
+		// 这里没有写limit哦
+    	List<User> userList = userService.userList();
 		JSONObject res = new JSONObject();
 		res.put("status","1");
 		JSONArray array = new JSONArray();
@@ -80,20 +83,9 @@ public class UserController{
 			userJson.put("user_id",user.getId());
 			userJson.put("user_name",user.getUserName());
 			userJson.put("credit",user.getCredit());
-			JSONArray petListJson = new JSONArray();
+
 			List<Pet> petList = userService.getPetListByUserName(user.getUserName());
-			for (Pet pet:petList){
-				JSONObject petJson = new JSONObject();
-				petJson.put("id",pet.getPetId());
-				petJson.put("name",pet.getName());
-				petJson.put("species",String.valueOf(pet.getSpecies()));
-				petJson.put("status",String.valueOf(pet.isStatus()));
-				petJson.put("birthday",pet.getBirthday());
-				petJson.put("price", String.valueOf(pet.getPrice()));
-				petJson.put("description",pet.getDescription());
-				petJson.put("img_url",pet.getImgUrl());
-				petListJson.add(petJson);
-			}
+			JSONArray petListJson = petStoreService.petsJson(petList,offset,limit);
 			userJson.put("pet_list",petListJson);
 		}
 		res.put("user_list",array);
@@ -195,5 +187,28 @@ public class UserController{
 			res.put("apply_list",array);
 		}
 		return res.toJSONString();
+	}
+
+	@GetMapping(value = "/user/petlist", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String userPetList(@RequestParam(value = "user_id") String userId,
+							  @RequestParam(value="limit",required = false,defaultValue = "10") int limit,
+							  @RequestParam(value="offset",required = false,defaultValue = "0") int offset){
+		List<Pet> petList = userService.getPetListByUserId(userId);
+		JSONObject res = new JSONObject();
+		res.put("status","1");
+		JSONArray petListJson = petStoreService.petsJson(petList,offset,limit);
+		res.put("pet_list",petListJson);
+		return res.toJSONString();
+	}
+
+	@GetMapping(value = "/market/userlist", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String sellers(@RequestParam(value="limit",required = false,defaultValue = "10") int limit,
+						  @RequestParam(value="offset",required = false,defaultValue = "0") int offset){
+		// 获取卖家
+		JSONObject res = new JSONObject();
+		return res.toJSONString();
+
 	}
 }

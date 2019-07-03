@@ -1,6 +1,5 @@
 package cn.theproudsoul.fiscopetshop.service;
 
-import cn.theproudsoul.fiscopetshop.entity.Admin;
 import cn.theproudsoul.fiscopetshop.entity.Applicant;
 import cn.theproudsoul.fiscopetshop.entity.Pet;
 import cn.theproudsoul.fiscopetshop.entity.User;
@@ -26,6 +25,4 @@ public interface UserService {
 
     List<Pet> getPetListByUserId(String id); // 获取用户宠物列表
     List<Pet> getPetListByUserName(String name);
-
-    boolean isAdmin() throws Exception;
 }
