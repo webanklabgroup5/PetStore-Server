@@ -20,13 +20,17 @@ import java.util.Map;
 @RestController
 public class UserController{
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
-	@Autowired
-	private PetStoreService petStoreService;
+	private final PetStoreService petStoreService;
 
-	@Autowired private ContractService contractService;
+	private final ContractService contractService;
+
+    public UserController(UserService userService, PetStoreService petStoreService, ContractService contractService) {
+        this.userService = userService;
+        this.petStoreService = petStoreService;
+        this.contractService = contractService;
+    }
 
     @PostMapping(value = "/login",consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
  	@ResponseBody
@@ -65,7 +69,8 @@ public class UserController{
 
  	@GetMapping(value = "/test")
 	@ResponseBody
-	public String test() throws Exception {
+	public String test(HttpServletRequest request, HttpSession session) throws Exception {
+        System.out.println(session.getId());
     	return contractService.getAccountContract().myAddress().send();
 	}
 

@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import util.Utils;
+
+import javax.servlet.http.HttpSession;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -39,15 +43,15 @@ public class UserTest {
 
     @Test
     public void testLoginController() throws Exception {
-
-        mockMvc.perform(post("/login")
+        HttpSession session = mockMvc.perform(post("/login")
         .content("{\"type\":\"1\",\"user_name\":\"lhl\",\"password\":\"lhllhl\"}")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8))//请求方式+地址
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.status", is("1")));
-        mockMvc.perform(get("/test")).andDo(print());
+                .andExpect(jsonPath("$.status", is("1")))
+                .andReturn().getRequest().getSession();
+        mockMvc.perform(get("/test").session((MockHttpSession) session)).andDo(print());
 
     }
 }
