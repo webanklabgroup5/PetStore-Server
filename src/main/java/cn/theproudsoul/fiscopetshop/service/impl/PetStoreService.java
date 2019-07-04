@@ -2,16 +2,13 @@ package cn.theproudsoul.fiscopetshop.service.impl;
 
 import cn.theproudsoul.fiscopetshop.entity.Order;
 import cn.theproudsoul.fiscopetshop.entity.Pet;
-import cn.theproudsoul.fiscopetshop.entity.PetExtra;
 import cn.theproudsoul.fiscopetshop.entity.User;
-import cn.theproudsoul.fiscopetshop.repository.PetExtraRepository;
 import cn.theproudsoul.fiscopetshop.repository.UserRepository;
-import cn.theproudsoul.fiscopetshop.solidity.Account;
-import cn.theproudsoul.fiscopetshop.solidity.PetMarket;
-import cn.theproudsoul.fiscopetshop.solidity.Transaction;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.fisco.bcos.web3j.tuples.generated.Tuple4;
+import org.fisco.bcos.web3j.tuples.generated.Tuple5;
 import org.fisco.bcos.web3j.tuples.generated.Tuple7;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +24,6 @@ public class PetStoreService {
     private ContractService contractService;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private PetExtraRepository petExtraRepository;
 
     public boolean isAdmin() throws Exception {
         if (contractService.getAccountContract().isAdmin().send().isStatusOK())
@@ -38,7 +33,6 @@ public class PetStoreService {
             return false;
         }
     }
-
 
     public User getUserInfoByAddress(String address){
         User user = userRepository.findByAddress(address);
@@ -81,19 +75,21 @@ public class PetStoreService {
         Pet pet = new Pet();
         pet.setPetId(petIndex);
         try {
-            Tuple7<Boolean, BigInteger, BigInteger, String, String, String, String> pet_tuple = contractService.getPetMarketContract().getPetById(new BigInteger(petIndex)).send();
-            pet.setBirthday(pet_tuple.getValue5());
-            pet.setName(pet_tuple.getValue4());
-            pet.setStatus(pet_tuple.getValue1());
-            pet.setPrice(pet_tuple.getValue3().intValue());
-            pet.setUpTime(pet_tuple.getValue7());
-            pet.setDescription(pet_tuple.getValue6());
-            pet.setSpecies(pet_tuple.getValue2().intValue());
-            PetExtra petExtra = petExtraRepository.findByPetName(pet_tuple.getValue4());
-            pet.setImgUrl(petExtra.getImgUrl());
-            pet.setRemark(petExtra.getRemark());
+            log.info("+++++++++++++++++++++++++++++++++++++++++++");
+            log.info("petIndex:"+new BigInteger(petIndex));
+            Tuple5<Boolean, BigInteger, BigInteger, String, String> pet_tuple1 = contractService.getPetMarketContract().getPetById1(new BigInteger(petIndex)).send();
+            Tuple4<String, String, String, String> pet_tuple2 = contractService.getPetMarketContract().getPetById2(new BigInteger(petIndex)).send();
+            pet.setBirthday(pet_tuple1.getValue5());
+            pet.setName(pet_tuple1.getValue4());
+            pet.setStatus(pet_tuple1.getValue1());
+            pet.setPrice(pet_tuple1.getValue3().intValue());
+            pet.setUpTime(pet_tuple2.getValue3());
+            pet.setDescription(pet_tuple2.getValue1());
+            pet.setSpecies(pet_tuple1.getValue2().intValue());
+            pet.setImgUrl(pet_tuple2.getValue2());
+            pet.setRemark(pet_tuple2.getValue4());
             // 获取owner地址
-            String ownerAddress = contractService.getPetMarketContract().petOwner(new BigInteger(petIndex)).send();
+            String ownerAddress = contractService.getPetMarketContract().petOwner(contractService.getAccountContract().myAddress().send() ,new BigInteger(petIndex)).send();
             if (ownerAddress!=null){
                 User owner = userRepository.findByAddress(ownerAddress);
                 owner.setCredit(contractService.getAccountContract().balanceOf(ownerAddress).send().intValue());
@@ -101,9 +97,8 @@ public class PetStoreService {
             } else {
                 log.info("宠物主人查找失败");
             }
-
-
         }catch (Exception e){
+            log.info("获取宠物信息失败");
             e.printStackTrace();
         }
         return pet;
@@ -118,22 +113,38 @@ public class PetStoreService {
     }
 
     public JSONObject userJSON(User user) {
+        if (user==null){
+            log.info("出错了出错了出错了！！！");
+        }
+
         JSONObject userJSON = new JSONObject();
         userJSON.put("id",user.getId());
-        userJSON.put("name", user.getUserName());
+        userJSON.put("user_name", user.getUserName());
         userJSON.put("credit",user.getCredit());
 
         return userJSON;
     }
 
+    public JSONArray usersJson(List<User> userList, int offset, int limit) {
+        JSONArray usersJson = new JSONArray();
+        if (userList==null)
+            return usersJson;
+        for (int i = offset; i < offset+limit; i ++){
+            usersJson.add(userJSON(userList.get(i)));
+        }
+        return usersJson;
+    }
+
     public JSONObject petJson(Pet pet){
         JSONObject petJson = new JSONObject();
-        petJson.put("id",pet.getPetId());
+        petJson.put("id",Integer.parseInt(pet.getPetId()));
         petJson.put("name",pet.getName());
-        petJson.put("species",String.valueOf(pet.getSpecies()));
-        petJson.put("status",String.valueOf(pet.isStatus()));
+        petJson.put("species",pet.getSpecies());
+        if (pet.isStatus())
+            petJson.put("status",1);
+        else petJson.put("status",0);
         if (pet.isStatus()){
-            petJson.put("price", String.valueOf(pet.getPrice()));
+            petJson.put("price", pet.getPrice());
             petJson.put("up_time",pet.getUpTime());
             petJson.put("remark",pet.getRemark());
         }
@@ -143,16 +154,16 @@ public class PetStoreService {
 
         User owner = pet.getOwner();
         JSONObject ownerJSON = userJSON(owner);
-        petJson.put("owener",ownerJSON);
+        petJson.put("owner",ownerJSON);
         return petJson;
     }
 
     public JSONArray petsJson(List<Pet> petList, int offset, int limit) {
-
+        log.info("offset:"+offset+",limit:"+limit);
         JSONArray petListJson = new JSONArray();
         if (petList==null) return petListJson;
         for (int i = offset; i < offset+limit; i ++){
-            petListJson.add(petList.get(i));
+            petListJson.add(petJson(petList.get(i)));
         }
         return petListJson;
     }
@@ -173,6 +184,8 @@ public class PetStoreService {
 
     public JSONArray ordersJson(List<Order> orderList, int offset, int limit) {
         JSONArray ordersJson = new JSONArray();
+        if (orderList==null)
+            return ordersJson;
         for (int i = offset; i < offset+limit; i ++){
             ordersJson.add(orderJson(orderList.get(i)));
         }

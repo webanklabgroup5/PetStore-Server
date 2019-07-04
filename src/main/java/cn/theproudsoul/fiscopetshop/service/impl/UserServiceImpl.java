@@ -1,37 +1,41 @@
 package cn.theproudsoul.fiscopetshop.service.impl;
 
+import cn.theproudsoul.fiscopetshop.constants.ContractConstants;
+import cn.theproudsoul.fiscopetshop.constants.GasConstants;
 import cn.theproudsoul.fiscopetshop.entity.*;
 
 import cn.theproudsoul.fiscopetshop.repository.ApplicantRepository;
 import cn.theproudsoul.fiscopetshop.repository.UserRepository;
+import cn.theproudsoul.fiscopetshop.service.PetService;
 import cn.theproudsoul.fiscopetshop.service.UserService;
 import cn.theproudsoul.fiscopetshop.solidity.Account;
 import cn.theproudsoul.fiscopetshop.solidity.PetMarket;
 import cn.theproudsoul.fiscopetshop.solidity.Transaction;
 import lombok.extern.slf4j.Slf4j;
+import org.fisco.bcos.web3j.crypto.Credentials;
+import org.fisco.bcos.web3j.crypto.gm.GenCredential;
+import org.fisco.bcos.web3j.protocol.Web3j;
 import org.fisco.bcos.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.fisco.bcos.web3j.tx.gas.StaticGasProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.UserKeyUtils;
 import util.Utils;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     private ContractService contractService;
-
-    @Autowired
-    private  PetStoreService petStoreService;
     @Autowired
     private  UserRepository userRepository;
     @Autowired
     private  ApplicantRepository applicantRepository;
+    @Autowired
+    private PetService petService;
 
     @Override
     public int auditUser(String userId, boolean isAgree) {
@@ -48,17 +52,20 @@ public class UserServiceImpl implements UserService {
                 String address = userKeyUtils.getAddress();
                 try {
                     // 将名字、积分、地址写进区块链
-                    TransactionReceipt receipt = contractService.getAccountContract().newAccount(address, BigInteger.valueOf(user.getCredit())).send();
+                    log.info(contractService.getCredentials().getAddress());
+
+                    TransactionReceipt receipt = contractService.getAccountContract().newAccount(address, BigInteger.valueOf(applicant.getCredit())).send();
+                    user = new User();
+                    user.setUserName(applicant.getUserName());
+                    user.setUserKey(key);
+                    user.setPassword(applicant.getPassword());
+                    user.setAddress(address);
+                    userRepository.save(user);
+                    applicantRepository.deleteById(applicant.getId());
+                    return 1;
                 } catch (Exception e){
                     e.printStackTrace();
-                }
-                user = new User();
-                user.setUserName(applicant.getUserName());
-                user.setUserKey(key);
-                user.setPassword(Utils.getSHA256Str(applicant.getPassword()));
-                userRepository.save(user);
-                applicantRepository.deleteById(applicant.getId());
-                return 1;
+                } return 0;
             } else return 0; // 用户名已存在
         } else { // 拒绝
             applicantRepository.deleteById(applicant.getId());
@@ -104,12 +111,12 @@ public class UserServiceImpl implements UserService {
         } else {
             String password = tmp.getPassword();
             log.info(password);
+            log.info(passwd);
 //            if (Utils.getSHA256Str(password).equals(passwd)){
             if (password.equals(passwd)){
                 System.out.println("密码正确");
                 return tmp.getId();
-            }
-            else {
+            } else {
                 log.info("密码错误");
                 return -1;
             }
@@ -117,21 +124,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserInfo() throws Exception {
+    public User getUserInfo(User user) {
+        BigInteger credit = null;
+        try {
+            String address = user.getAddress();
 
-        //String name = accountContract.getMyName().send();
-        String name ="test";
-        User user = userRepository.findByUserName(name);
-        // 区块链查询
-        BigInteger credit = new BigInteger("1000");
+            log.info("我是谁"+contractService.getAccountContract().myAddress().send());
+            credit = contractService.getAccountContract().balanceOf(address).send();
+        } catch (Exception e) {
+            log.info("获取用户信息失败！");
+            e.printStackTrace();
+        }
+
         user.setCredit(credit.intValue());
-
-        List<Pet> petList = null;
-        List<BigInteger> petIndex = contractService.getPetMarketContract().getMyPets().send();
-        petList = petStoreService.getPetsByPetId(petIndex);
-        if (petList==null) petList = new ArrayList<>();
-
-
+//
+//        List<Pet> petList;
+//        List<BigInteger> petIndex = contractService.getPetMarketContract().getMyPets().send();
+//        petList = petStoreService.getPetsByPetId(petIndex);
+//        if (petList==null) petList = new ArrayList<>();
         return user;
     }
 
@@ -150,8 +160,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Pet> getPetListByUserName(String name) {
+    public List<Pet> getPetList() {
         // 在区块链上根据用户名查找宠物列表
+
         return null;
+    }
+
+    @Override
+    public List<User> sellers() {
+        List<Pet> petList = petService.getPetsOnSale();
+        Set<User> userSet= new HashSet<>();
+
+        for (Pet pet:petList){
+            userSet.add(pet.getOwner());
+        }
+        List<User> userList = new ArrayList<>(userSet);
+        return userList;
     }
 }

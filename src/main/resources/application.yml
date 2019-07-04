@@ -16,13 +16,13 @@ channel-service:
   group-id: 1 # The specified group to which the SDK connects
   agency-name: fisco # agency name
 
-user-key:
-  user-key: 3bed914595c159cbce70ec5fb6aff3d6797e0c5ee5a7a9224a21cae8932d84a4
+#user-key:
+#  user-key: 3bed914595c159cbce70ec5fb6aff3d6797e0c5ee5a7a9224a21cae8932d84a4
 
 contract-address:
-  account: 98177ee51e5b722567b11b6a824cc27ce3183229
-  pet-market: 7fded89c9cbb66a716fca6b3717e3e2bbce9c162
-  transaction: d3212bee7257ed1aff82f1ba68cb5c0c3b83b266
+  account: 7506f526e04f33f00ac6eedc7b6935786d9caf9c
+  pet-market: 946982993e0eb4b6cebfc1d5ba5d7375a7e824f0
+  transaction: 197d9ec34f74db5dbc9d45a144da858d76497484
 
 spring:
   datasource:

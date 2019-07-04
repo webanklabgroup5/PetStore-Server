@@ -23,8 +23,8 @@ public class PetController {
     @Autowired
     private PetService petService;
     @Autowired private PetStoreService petStoreService;
-
-    private String basePath="/home/petshop/pet/"; // 图片储存根目录
+    private String basePath="D:\\academic\\shixun\\PetStore-Server\\pic\\"; // 图片储存根目录
+    // private String basePath="/home/petshop/pet/"; // 图片储存根目录
     private String accessUrl = "http://ali.theproudsoul.cn:22222/petshop/pet/";
 
     @PostMapping(value = "/petadd", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
@@ -45,9 +45,9 @@ public class PetController {
         }
         JSONObject res=new JSONObject();
         if (status){
-            res.put("status","1");
+            res.put("status",1);
         }else {
-            res.put("status","0");
+            res.put("status",0);
             res.put("error_msg","执行失败，请重试……");
         }
         return res.toJSONString();
@@ -56,7 +56,6 @@ public class PetController {
     @PostMapping(value = "/petstatus", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String petStatus(@RequestBody Map<String, String> map, HttpServletRequest request) throws Exception {
-
         String petId = map.get("pet_id");
         int action = Integer.parseInt(map.get("action"));
         JSONObject res=new JSONObject();
@@ -69,13 +68,13 @@ public class PetController {
         } else if (action==0) {
             status = petService.petDown(petId);
         } else {
-            res.put("status","0");
+            res.put("status",0);
             res.put("error_msg","参数错误！");
         }
         if (status){
-            res.put("status","1");
+            res.put("status",1);
         }else {
-            res.put("status","0");
+            res.put("status",0);
             res.put("error_msg","执行失败，请重试……");
         }
         return res.toJSONString();
@@ -88,19 +87,31 @@ public class PetController {
         // 获取销售中的宠物
         // 需要owner基本信息
         List<Pet> petList = petService.getPetsOnSale();
-        JSONArray petListJson = petStoreService.petsJson(petList,offset,limit);
         JSONObject res = new JSONObject();
-        res.put("status","1");
+        int total = petList.size();
+        res.put("total",total);
+
+        if (total==0){
+            res.put("pet_list",new JSONArray());
+        } else if (offset>=total){
+            res.put("status",0);
+            res.put("error_msg","再怎么找也没有了哦");
+            return res.toJSONString();
+        }
+        if (limit+offset>=total)
+            limit=total-offset;
+        res.put("status",1);
+        JSONArray petListJson = petStoreService.petsJson(petList,offset,limit);
         res.put("pet_list",petListJson);
         return res.toJSONString();
     }
 
-    @PostMapping(value = "/upload", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/upload", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String upload(@RequestParam("photo") MultipartFile file, HttpServletRequest request) throws IOException {
         JSONObject res = new JSONObject();
         if (file.isEmpty()) {
-            res.put("status","0");
+            res.put("status",0);
             res.put("error_msg","文件不能为空");
             return res.toJSONString();
         }
@@ -120,15 +131,44 @@ public class PetController {
         try {
             file.transferTo(dest);
             log.info("上传成功后的文件路径：" + filePath + fileName);
-            res.put("status","1");
+            res.put("status",1);
             res.put("url",accessUrl + now+suffixName);
             return res.toJSONString();
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
         }
-        res.put("status","1");
+        res.put("status",1);
         res.put("error_msg","文件上传失败");
 
         return res.toJSONString();
     }
+
+    @GetMapping(value = "/petlist", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String PetList(@RequestParam(value="limit",required = false,defaultValue = "10") int limit,
+                          @RequestParam(value="offset",required = false,defaultValue = "0") int offset){
+        // 获取销售中的宠物
+        // 需要owner基本信息
+        List<Pet> petList = petService.getPetsOnSale();
+        JSONObject res = new JSONObject();
+        int total = petList.size();
+        res.put("total",total);
+        if (total==0){
+            res.put("pet_list",new JSONArray());
+        } else if (offset>=total){
+            res.put("status",0);
+            res.put("error_msg","再怎么找也没有了哦");
+            return res.toJSONString();
+        }
+        if (limit+offset>=total)
+            limit=total-offset;
+
+        res.put("status",1);
+
+        JSONArray petListJson = petStoreService.petsJson(petList,offset,limit);
+
+        res.put("pet_list",petListJson);
+        return res.toJSONString();
+    }
+
 }

@@ -23,10 +23,11 @@ import org.springframework.web.context.WebApplicationContext;
 public class ContractService {
     @Autowired
     private Web3j web3j;
-    private Credentials credentials;
-    private Account accountContract;
-    private PetMarket petMarketContract;
-    private Transaction transactionContract;
+
+    private static Credentials credentials;
+    private static Account accountContract;
+    private static PetMarket petMarketContract;
+    private static Transaction transactionContract;
 
     public boolean isAdmin() {
         return isAdmin;
@@ -37,6 +38,7 @@ public class ContractService {
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
     }
+
     public void setCredentials(String userKey) {
         credentials = GenCredential.create(userKey);
         accountContract = Account.load(ContractConstants.account, web3j, credentials, new StaticGasProvider(
@@ -45,6 +47,11 @@ public class ContractService {
                 GasConstants.GAS_PRICE,GasConstants.GAS_LIMIT));
         transactionContract = Transaction.load(ContractConstants.transaction, web3j, credentials, new StaticGasProvider(
                 GasConstants.GAS_PRICE,GasConstants.GAS_LIMIT));
+
+        log.info("user_key:"+userKey);
+        log.info("ContractConstants.account:"+ContractConstants.account);
+        log.info("ContractConstants.petMarket:"+ContractConstants.petMarket);
+        log.info("ContractConstants.transaction:"+ContractConstants.transaction);
         try {
             isAdmin = accountContract.isAdmin().send().isStatusOK();
         } catch (Exception e) {
@@ -58,7 +65,9 @@ public class ContractService {
     }
 
     public Account getAccountContract() {
-            return accountContract;
+        System.out.println("+_++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println(credentials.getAddress());
+        return accountContract;
     }
 
     public PetMarket getPetMarketContract() {

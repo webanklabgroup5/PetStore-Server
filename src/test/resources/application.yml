@@ -16,8 +16,8 @@ channel-service:
   group-id: 1 # The specified group to which the SDK connects
   agency-name: fisco # agency name
 
-user-key:
-  user-key: 3bed914595c159cbce70ec5fb6aff3d6797e0c5ee5a7a9224a21cae8932d84a4
+#user-key:
+#  user-key: 3bed914595c159cbce70ec5fb6aff3d6797e0c5ee5a7a9224a21cae8932d84a4
 
 contract-address:
   account: 98177ee51e5b722567b11b6a824cc27ce3183229
@@ -32,6 +32,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     database-platform: org.hibernate.dialect.H2Dialect
     type-aliases-package: cn.theproudsoul.fiscopetstop.repository
+#    initialization-mode: always
     sql-script-encoding: utf-8
 
   h2:

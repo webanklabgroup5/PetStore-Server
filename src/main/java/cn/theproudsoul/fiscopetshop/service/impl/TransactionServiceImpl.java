@@ -41,9 +41,8 @@ public class TransactionServiceImpl implements TransactionService {
         return 0;
     }
 
-
     @Override
-    public List<Order> getOrdersByUserId() {
+    public List<Order> getOrders() {
         List<Order> orderList = null;
         try {
             List<BigInteger> orderIndex = contractService.getTransactionContract().getMyRecords().send();
@@ -116,6 +115,22 @@ public class TransactionServiceImpl implements TransactionService {
             log.error("审判出错！");
         }
         return false;
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        List<Order> orderList = new ArrayList<>();
+        try {
+            log.info("contractService.getTransactionContract()"+(contractService.getTransactionContract()==null));
+            int orderTotal = contractService.getTransactionContract().getRecordCount().send().intValue();
+            for (int i= 0;i<orderTotal;i++){
+                orderList.add(petStoreService.getOrderByOrderId(String.valueOf(i)));
+            }
+        } catch (Exception e) {
+            log.info("获取所有交易记录失败！");
+            e.printStackTrace();
+        }
+        return orderList;
     }
 
 }

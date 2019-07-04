@@ -8,7 +8,7 @@ import java.util.List;
 public interface TransactionService {
     int transaction(String petId); // 申请交易
 
-    List<Order> getOrdersByUserId(); // 根据用户获取订单列表
+    List<Order> getOrders(); // 根据用户获取订单列表
 
     List<Pet> getPetsOnSell(); // 获取在售宠物列表
 
@@ -17,4 +17,6 @@ public interface TransactionService {
     boolean arbitration(String transactionId); // 申请仲裁
 
     boolean judge(String transactionId, int result); // 进行审判
+
+    List<Order> getAllOrders();
 }

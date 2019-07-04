@@ -5,6 +5,7 @@ import cn.theproudsoul.fiscopetshop.entity.Pet;
 import cn.theproudsoul.fiscopetshop.entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 
 public interface UserService {
@@ -19,10 +20,14 @@ public interface UserService {
 
     long checkPassword(int type, String name, String passwd);//检查password
 
-    User getUserInfo() throws Exception;
+    User getUserInfo(User user);
 
     User getUserById(String id); // 使用id获取用户信息
 
     List<Pet> getPetListByUserId(String id); // 获取用户宠物列表
-    List<Pet> getPetListByUserName(String name);
+
+    List<Pet> getPetList();
+
+    List<User> sellers();
+
 }

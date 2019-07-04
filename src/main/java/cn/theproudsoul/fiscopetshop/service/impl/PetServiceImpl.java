@@ -1,14 +1,8 @@
 package cn.theproudsoul.fiscopetshop.service.impl;
 
 import cn.theproudsoul.fiscopetshop.entity.Pet;
-import cn.theproudsoul.fiscopetshop.entity.PetExtra;
-import cn.theproudsoul.fiscopetshop.repository.PetExtraRepository;
 import cn.theproudsoul.fiscopetshop.service.PetService;
-import cn.theproudsoul.fiscopetshop.solidity.Account;
 import cn.theproudsoul.fiscopetshop.solidity.PetMarket;
-import cn.theproudsoul.fiscopetshop.solidity.Transaction;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.fisco.bcos.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,31 +21,24 @@ public class PetServiceImpl implements PetService {
     private ContractService contractService;
     @Autowired
     private PetStoreService petStoreService;
+    @Autowired
+    private PetService petService;
 
     @Override
     public boolean petAdd(String name, int species, String picPath, String birthday, String description) throws Exception {
         TransactionReceipt receipt = contractService.getPetMarketContract().newPet(name, BigInteger.valueOf(species),birthday,description,picPath).send();
         if (receipt.isStatusOK()){
-            PetExtra petExtra = new PetExtra();
-            petExtra.setImgUrl(picPath);
-            petExtra.setPetName(name);
-            //petExtraRepository.save(petExtra);
             return true;
         }else {
             log.info("status: {}", receipt.getStatus());
-            return true;
+            return false;
         }
     }
 
     @Override
     public boolean petDown(String id) throws Exception {
-        String petName = contractService.getPetMarketContract().getPetById(new BigInteger(id)).send().getValue4();
         TransactionReceipt receipt = contractService.getPetMarketContract().offSale(new BigInteger(id)).send();
         log.info("status: {}", receipt.getStatus());
-        if (receipt.isStatusOK()){
-            // 删除本地数据库
-            //petExtraRepository.deleteByPetName(petName);
-        }
         return receipt.isStatusOK();
     }
 
@@ -59,11 +46,12 @@ public class PetServiceImpl implements PetService {
     public boolean petOn(String petId, int price, String remark) throws Exception {
         // 计算上架时间now
         String now = Utils.sdf(System.currentTimeMillis());
-        TransactionReceipt receipt = contractService.getPetMarketContract().sellPet(new BigInteger(petId),BigInteger.valueOf(price),now).send();
+        TransactionReceipt receipt = contractService.getPetMarketContract().sellPet(new BigInteger(petId),BigInteger.valueOf(price),now,remark).send();
+
+        //TransactionReceipt receipt = contractService.getPetMarketContract().sellPet(new BigInteger(petId),BigInteger.valueOf(price),now).send();
         //if ()
         return receipt.isStatusOK();
     }
-
 
     @Override
     public List<Pet> getPetsOnSale() {
@@ -80,4 +68,22 @@ public class PetServiceImpl implements PetService {
         }
         return petList;
     }
+
+    @Override
+    public int getPetCount(String address) {
+        try {
+            BigInteger petCount = contractService.getPetMarketContract().ownerPetCount(address).send();
+            return petCount.intValue();
+        } catch (Exception e) {
+            log.info("获取用户宠物数量错误！！！");
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+//    @Override
+//    public List<Pet> getPetList() {
+//        //petMarket.
+//        return null;
+//    }
 }

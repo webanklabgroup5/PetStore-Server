@@ -65,71 +65,92 @@ public class LoginInterceptor implements HandlerInterceptor{
             return true;
         }
 
-        String token = request.getParameter("token");
-        if(token == null) {
-            String data = request.getParameter("data");
-            token = (String)JSON.parseObject(data).get("token");
+        if(request.getRequestURI().contains("userapply")) {
+            returnJson.setSuccess(true);
+            returnJson.setMessage("登出请求成功");
+
+            return true;
         }
 
-        if(token == null){
+        if(request.getRequestURI().contains("upload")) {
+            returnJson.setSuccess(true);
+            returnJson.setMessage("登出请求成功");
 
-            returnJson.setSuccess(false);
-            returnJson.setMessage("登录验证失败，缺少token");
-
-            dealJsonReturn(request, response, returnJson.toJSON());
-
-            return false;
+            return true;
         }
 
-        String sessionId = request.getParameter("sessionId");
-        if(sessionId == null) {
-            String data = request.getParameter("data");
-            sessionId = (String)JSON.parseObject(data).get("sessionId");
-        }
-
-        HttpSession session = MySessionContext.getSession(sessionId);
-
-        if(session == null || session.getAttribute(sessionId) == null) {
-            returnJson.setSuccess(false);
-            returnJson.setMessage("登录验证失败，已登出");
-
-            dealJsonReturn(request, response, returnJson.toJSON());
-
-            return false;
-        }
-
-        String tokenAndDateTime = (String)session.getAttribute(sessionId);
-
-        String[] tokenAndDateTimeArray = tokenAndDateTime.split(",");
-        String tokenStorage = tokenAndDateTimeArray[0];
-
-        if(tokenStorage == null || token == null || !tokenStorage.equals(token)) {
-            returnJson.setSuccess(false);
-            returnJson.setMessage("登录验证失败，token不匹配");
-
-            dealJsonReturn(request, response, returnJson.toJSON());
-
-            return false;
-        }
-
-        String dateTimeStr = tokenAndDateTimeArray[1];
-        Long dateTime = Long.parseLong(dateTimeStr);
-        Long before5 = new Timestamp(System.currentTimeMillis()).getTime() - 300000;//5分钟为超时时间
-        if(dateTime < before5) {
-            returnJson.setSuccess(false);
-            returnJson.setMessage("登录验证失败，已超时");
-
-            dealJsonReturn(request, response, returnJson.toJSON());
-
-            return false;
-        }
+//        if(request.getRequestURI().contains("test")) {
+//            returnJson.setSuccess(true);
+//            returnJson.setMessage("登出请求成功");
+//
+//            return true;
+//        }
+//
+//        String token = request.getParameter("token");
+//        if(token == null) {
+//            String data = request.getParameter("data");
+//            token = (String)JSON.parseObject(data).get("token");
+//        }
+//
+//        if(token == null){
+//
+//            returnJson.setSuccess(false);
+//            returnJson.setMessage("登录验证失败，缺少token");
+//
+//            dealJsonReturn(request, response, returnJson.toJSON());
+//
+//            return false;
+//        }
+//
+//        String sessionId = request.getParameter("sessionId");
+//        if(sessionId == null) {
+//            String data = request.getParameter("data");
+//            sessionId = (String)JSON.parseObject(data).get("sessionId");
+//        }
+//
+//        HttpSession session = MySessionContext.getSession(sessionId);
+//
+//        if(session == null || session.getAttribute(sessionId) == null) {
+//            returnJson.setSuccess(false);
+//            returnJson.setMessage("登录验证失败，已登出");
+//
+//            dealJsonReturn(request, response, returnJson.toJSON());
+//
+//            return false;
+//        }
+//
+//        String tokenAndDateTime = (String)session.getAttribute(sessionId);
+//
+//        String[] tokenAndDateTimeArray = tokenAndDateTime.split(",");
+//        String tokenStorage = tokenAndDateTimeArray[0];
+//
+//        if(tokenStorage == null || token == null || !tokenStorage.equals(token)) {
+//            returnJson.setSuccess(false);
+//            returnJson.setMessage("登录验证失败，token不匹配");
+//
+//            dealJsonReturn(request, response, returnJson.toJSON());
+//
+//            return false;
+//        }
+//
+//        String dateTimeStr = tokenAndDateTimeArray[1];
+//        Long dateTime = Long.parseLong(dateTimeStr);
+//        Long before5 = new Timestamp(System.currentTimeMillis()).getTime() - 300000;//5分钟为超时时间
+//        if(dateTime < before5) {
+//            returnJson.setSuccess(false);
+//            returnJson.setMessage("登录验证失败，已超时");
+//
+//            dealJsonReturn(request, response, returnJson.toJSON());
+//
+//            return false;
+//        }
 
         //returnJson.setSuccess(true);
         //returnJson.setMessage("登录验证成功");
 
         //更新token以及token的时间
         //String newToken = Token.getToken();
-        session.setAttribute(sessionId, token + "," + new Timestamp(System.currentTimeMillis()).getTime());
+        //session.setAttribute(sessionId, token + "," + new Timestamp(System.currentTimeMillis()).getTime());
         //更新Token，防止重复提交
         //response.setHeader("token", newToken);
 
