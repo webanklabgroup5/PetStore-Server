@@ -1,17 +1,15 @@
 package cn.theproudsoul.fiscopetshop.controller;
 
 import cn.theproudsoul.fiscopetshop.entity.Applicant;
-import cn.theproudsoul.fiscopetshop.entity.Order;
 import cn.theproudsoul.fiscopetshop.entity.Pet;
 import cn.theproudsoul.fiscopetshop.entity.User;
 import cn.theproudsoul.fiscopetshop.service.PetService;
 import cn.theproudsoul.fiscopetshop.service.UserService;
 import cn.theproudsoul.fiscopetshop.service.impl.ContractService;
 import cn.theproudsoul.fiscopetshop.service.impl.PetStoreService;
-import cn.theproudsoul.fiscopetshop.solidity.PetMarket;
 import com.alibaba.fastjson.JSONArray;
-import lombok.extern.slf4j.Slf4j;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,31 +40,46 @@ public class UserController{
     @PostMapping(value = "/login",consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
  	@ResponseBody
  	public String login(@RequestBody Map<String, String> map, HttpServletRequest request, HttpServletResponse response) throws Exception {
- 		String userType = map.get("type");
+ 		int userType = Integer.parseInt(map.get("type"));
  		String userName=map.get("user_name");
 		String password=map.get("password");
 		JSONObject res=new JSONObject();
-		if (userType==null||userName==null||password==null){
+		if (((userType != 0)&&(userType!=1)) || (userName == null) || (password == null)){
 			res.put("status",0);
-			res.put("error_msg", "缺少参数……");
+			res.put("error_msg", "参数错误……");
 		}
 
  		//登录操作checkPassword
- 		long id= userService.checkPassword(Integer.parseInt(userType),userName,password);
+ 		long id= userService.checkPassword(userType,userName,password);
 
- 		if(id!=-1) {
+ 		if(id>=0) {
  			res.put("status", 1);
  			User user = userService.getUserById(String.valueOf(id));
+
+            // 合约初始化
+            contractService.setCredentials(user.getUserKey());
+
+            // 验证用户类型
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println(contractService.isAdmin());
+            System.out.println(userType);
+            if((contractService.isAdmin()&&userType==1)||(!contractService.isAdmin()&&userType==0)){
+                res.put("status", 0);
+                res.put("error_msg","用户名与类型不对应");
+                return res.toJSONString();
+            }
+            user.setCredit(userService.getMyCredit());
 			JSONObject userObject =petStoreService.userJSON(user);
-			userObject.put("id",id);
- 			userObject.put("user_name",userName);
+			//userObject.put("id",id);
+ 			//userObject.put("user_name",userName);
 			//userObject.put("credit",user.getCredit());
-			userObject.put("type", userType);
+			//userObject.put("type", userType);
+			// 获取用户积分
+
 //			List<Pet> petList = userService.getPetListByUserName(userName);
 //			JSONArray petListJson = petStoreService.petsJson(petList,0,10);
 //			userObject.put("pet_list",petListJson);
 			res.put("user",userObject);
-			contractService.setCredentials(user.getUserKey());
 		} else {
  			res.put("status", 0);
  			res.put("error_msg","用户名或密码错误");

@@ -53,7 +53,7 @@ public class ContractService {
         log.info("ContractConstants.petMarket:"+ContractConstants.petMarket);
         log.info("ContractConstants.transaction:"+ContractConstants.transaction);
         try {
-            isAdmin = accountContract.isAdmin().send().isStatusOK();
+            isAdmin=accountContract.myAddress().send().equals("0x7f99c0c7cd0913e32c1eac9a5337f1c727c20cbf");
         } catch (Exception e) {
             log.info("调用管理员验证接口失败！");
             e.printStackTrace();

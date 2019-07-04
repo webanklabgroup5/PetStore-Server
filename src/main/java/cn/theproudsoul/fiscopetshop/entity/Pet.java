@@ -1,7 +1,7 @@
 package cn.theproudsoul.fiscopetshop.entity;
 
 public class Pet{
-    private String petId;
+    private long petId;
     private String name;
     private int species;
     private String birthday;
@@ -38,11 +38,11 @@ public class Pet{
     }
 
 
-    public String getPetId() {
+    public long getPetId() {
         return petId;
     }
 
-    public void setPetId(String petId) {
+    public void setPetId(long petId) {
         this.petId = petId;
     }
 

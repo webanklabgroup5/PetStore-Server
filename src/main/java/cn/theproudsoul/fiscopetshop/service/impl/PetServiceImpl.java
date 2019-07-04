@@ -2,10 +2,8 @@ package cn.theproudsoul.fiscopetshop.service.impl;
 
 import cn.theproudsoul.fiscopetshop.entity.Pet;
 import cn.theproudsoul.fiscopetshop.service.PetService;
-import cn.theproudsoul.fiscopetshop.solidity.PetMarket;
 import lombok.extern.slf4j.Slf4j;
 import org.fisco.bcos.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.Utils;
 
@@ -17,12 +15,13 @@ import java.util.List;
 @Slf4j
 public class PetServiceImpl implements PetService {
 
-    @Autowired
-    private ContractService contractService;
-    @Autowired
-    private PetStoreService petStoreService;
-    @Autowired
-    private PetService petService;
+    private final ContractService contractService;
+    private final PetStoreService petStoreService;
+
+    public PetServiceImpl(ContractService contractService, PetStoreService petStoreService) {
+        this.contractService = contractService;
+        this.petStoreService = petStoreService;
+    }
 
     @Override
     public boolean petAdd(String name, int species, String picPath, String birthday, String description) throws Exception {
@@ -64,6 +63,21 @@ public class PetServiceImpl implements PetService {
                 petList = petStoreService.getPetsByPetId(petIndex);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return petList;
+    }
+
+    @Override
+    public List<Pet> getPetList() {
+        List<Pet> petList = new ArrayList<>();
+        try {
+            int petCount = contractService.getPetMarketContract().petCount().send().intValue();
+            for (int i =0;i<petCount;i++){
+                petList.add(petStoreService.getPetByPetId(i));
+            }
+        } catch (Exception e) {
+            log.info("获取宠物总数量出错了");
             e.printStackTrace();
         }
         return petList;

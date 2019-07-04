@@ -14,5 +14,7 @@ public interface PetService {
 
     List<Pet> getPetsOnSale();
 
+    List<Pet> getPetList();
+
     int getPetCount(String address);
 }

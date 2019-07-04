@@ -5,7 +5,6 @@ import cn.theproudsoul.fiscopetshop.entity.Pet;
 import cn.theproudsoul.fiscopetshop.entity.User;
 
 import java.util.List;
-import java.util.Set;
 
 
 public interface UserService {
@@ -21,6 +20,8 @@ public interface UserService {
     long checkPassword(int type, String name, String passwd);//检查password
 
     User getUserInfo(User user);
+
+    int getMyCredit();
 
     User getUserById(String id); // 使用id获取用户信息
 

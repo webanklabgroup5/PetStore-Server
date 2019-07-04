@@ -49,7 +49,7 @@ public class PetStoreService {
         order.setId(orderIndex);
         try {
             Tuple7<String, String, BigInteger, BigInteger, BigInteger, String, String> order_tuple = contractService.getTransactionContract().getRecordById(new BigInteger(orderIndex)).send();
-            order.setPet(getPetByPetId(String.valueOf(order_tuple.getValue3())));
+            order.setPet(getPetByPetId(order_tuple.getValue3().longValue()));
             order.setPrice(order_tuple.getValue4().intValue());
 
             order.setSeller(getUserInfoByAddress(order_tuple.getValue2()));
@@ -71,14 +71,14 @@ public class PetStoreService {
         return orderList;
     }
 
-    public Pet getPetByPetId(String petIndex){
+    public Pet getPetByPetId(long petIndex){
         Pet pet = new Pet();
         pet.setPetId(petIndex);
         try {
             log.info("+++++++++++++++++++++++++++++++++++++++++++");
-            log.info("petIndex:"+new BigInteger(petIndex));
-            Tuple5<Boolean, BigInteger, BigInteger, String, String> pet_tuple1 = contractService.getPetMarketContract().getPetById1(new BigInteger(petIndex)).send();
-            Tuple4<String, String, String, String> pet_tuple2 = contractService.getPetMarketContract().getPetById2(new BigInteger(petIndex)).send();
+            log.info("petIndex:"+petIndex);
+            Tuple5<Boolean, BigInteger, BigInteger, String, String> pet_tuple1 = contractService.getPetMarketContract().getPetById1(BigInteger.valueOf(petIndex)).send();
+            Tuple4<String, String, String, String> pet_tuple2 = contractService.getPetMarketContract().getPetById2(BigInteger.valueOf(petIndex)).send();
             pet.setBirthday(pet_tuple1.getValue5());
             pet.setName(pet_tuple1.getValue4());
             pet.setStatus(pet_tuple1.getValue1());
@@ -89,7 +89,7 @@ public class PetStoreService {
             pet.setImgUrl(pet_tuple2.getValue2());
             pet.setRemark(pet_tuple2.getValue4());
             // 获取owner地址
-            String ownerAddress = contractService.getPetMarketContract().petOwner(contractService.getAccountContract().myAddress().send() ,new BigInteger(petIndex)).send();
+            String ownerAddress = contractService.getPetMarketContract().petOwner(contractService.getAccountContract().myAddress().send() , BigInteger.valueOf(petIndex)).send();
             if (ownerAddress!=null){
                 User owner = userRepository.findByAddress(ownerAddress);
                 owner.setCredit(contractService.getAccountContract().balanceOf(ownerAddress).send().intValue());
@@ -107,7 +107,7 @@ public class PetStoreService {
     public List<Pet> getPetsByPetId(List<BigInteger> petIndex){
         List<Pet> petList = new ArrayList<>();
         for(BigInteger i: petIndex){
-            petList.add(getPetByPetId(String.valueOf(i)));
+            petList.add(getPetByPetId(i.longValue()));
         }
         return petList;
     }
@@ -137,7 +137,7 @@ public class PetStoreService {
 
     public JSONObject petJson(Pet pet){
         JSONObject petJson = new JSONObject();
-        petJson.put("id",Integer.parseInt(pet.getPetId()));
+        petJson.put("id",pet.getPetId());
         petJson.put("name",pet.getName());
         petJson.put("species",pet.getSpecies());
         if (pet.isStatus())

@@ -123,4 +123,12 @@ public class Utils {
         return simpleDateFormat.format(object);
     }
 
+//    public static void main(String args[]){
+//        System.out.println(getSHA256Str("mzwmzw"));
+//        System.out.println(getSHA256Str("lhllhl"));
+//        System.out.println(getSHA256Str("zyjzyj"));
+//        System.out.println(getSHA256Str("zpfzpf"));
+//        System.out.println(getSHA256Str("ljcljc"));
+//    }
+
 }

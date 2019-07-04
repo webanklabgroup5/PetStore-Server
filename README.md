@@ -79,20 +79,21 @@
 - 提取重复petlistjson为函数(Done)
 - petlist分页(Done)
 - 买卖家信息提取(Done)
-- user模块中的seller
+- user模块中的seller(Done)
 - pet全部加上owner(Done)
 - 文件上传映射 (Done)
-- 重新编写sql将user表中credit字段删除
+- 重新编写sql将user表中credit字段删除(Done)
 
 ## 问题
 
 1. 宠物上架没有价格(Solve)
 2. 宠物种类使用int吗(Solve)
 3. 交易时间和上架时间(Solve)
+4. UserController 登录不返回宠物信息
 
 ## 合约需求
 
-1. 需要根据用户名查找用户id或者petlist(Achieve)
+1. 需要根据用户名查找用户id或者petlist
 2. 管理员添加用户(Achieve)
 
 ## 0704 TODO
@@ -102,3 +103,4 @@
 3. 数据库环境
 4. pet 模块请求更新
 5. 服务器数据库库表的设置
+6. 数据库加密保存

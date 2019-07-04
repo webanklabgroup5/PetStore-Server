@@ -82,7 +82,7 @@ public class PetController {
 
     @GetMapping(value = "/market/petlist", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public String Sellers(@RequestParam(value="limit",required = false,defaultValue = "10") int limit,
+    public String petsOnSell(@RequestParam(value="limit",required = false,defaultValue = "10") int limit,
                           @RequestParam(value="offset",required = false,defaultValue = "0") int offset){
         // 获取销售中的宠物
         // 需要owner基本信息
@@ -147,9 +147,8 @@ public class PetController {
     @ResponseBody
     public String PetList(@RequestParam(value="limit",required = false,defaultValue = "10") int limit,
                           @RequestParam(value="offset",required = false,defaultValue = "0") int offset){
-        // 获取销售中的宠物
-        // 需要owner基本信息
-        List<Pet> petList = petService.getPetsOnSale();
+
+        List<Pet> petList = petService.getPetList();
         JSONObject res = new JSONObject();
         int total = petList.size();
         res.put("total",total);
