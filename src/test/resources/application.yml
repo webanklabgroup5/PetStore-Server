@@ -5,8 +5,8 @@ group-channel-connections-config:
   all-channel-connections:
   - group-id: 1  #group ID
     connections-str:
-                    - ali.theproudsoul.cn:20200  # node listen_ip:channel_listen_port
-                    - ali.theproudsoul.cn:20201
+                    - 127.0.0.1:20200  # node listen_ip:channel_listen_port
+                    - 127.0.0.1:20201
   - group-id: 2  
     connections-str:
                     - 127.0.0.1:20202  # node listen_ip:channel_listen_port
@@ -27,8 +27,8 @@ contract-address:
 spring:
   datasource:
     url: jdbc:mariadb://127.0.0.1:3306/test
-    username: root
-    password: zyj971213
+    username: 
+    password: 
     driver-class-name: org.mariadb.jdbc.Driver
     database-platform: org.hibernate.dialect.H2Dialect
     type-aliases-package: cn.theproudsoul.fiscopetstop.repository

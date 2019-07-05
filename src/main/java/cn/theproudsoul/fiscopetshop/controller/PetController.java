@@ -24,8 +24,8 @@ public class PetController {
     private final PetService petService;
     private final PetStoreService petStoreService;
     private final ContractService contractService;
-    //private String basePath="D:\\academic\\shixun\\PetStore-Server\\pic\\"; // 图片储存根目录
-    private String basePath="/home/petshop/pet/"; // 图片储存根目录
+    private String basePath="D:\\academic\\shixun\\PetStore-Server\\pic\\"; // 图片储存根目录
+    //private String basePath="/home/petshop/pet/"; // 图片储存根目录
     private String accessUrl = "http://ali.theproudsoul.cn:22222/petshop/pet/";
 
     public PetController(PetService petService, PetStoreService petStoreService, ContractService contractService) {

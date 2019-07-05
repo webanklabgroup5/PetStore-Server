@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
                         user = new User();
                         user.setUserName(applicant.getUserName());
                         user.setUserKey(key);
-                        user.setPassword(Utils.getSHA256Str(applicant.getPassword()));
+                        user.setPassword(applicant.getPassword());
                         user.setAddress(address);
                         userRepository.save(user);
                         applicantRepository.deleteById(applicant.getId());
