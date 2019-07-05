@@ -115,6 +115,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Order> getAllOrders() {
+        if (!contractService.isAdmin()) return null;
         List<Order> orderList = new ArrayList<>();
         try {
             log.info("contractService.getTransactionContract()"+(contractService.getTransactionContract()==null));

@@ -45,6 +45,9 @@ public class PetServiceImpl implements PetService {
     public boolean petOn(String petId, int price, String remark) throws Exception {
         // 计算上架时间now
         String now = Utils.sdf(System.currentTimeMillis());
+
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("id:"+petId+",price:"+price+",remark:"+remark+",now:"+now);
         TransactionReceipt receipt = contractService.getPetMarketContract().sellPet(new BigInteger(petId),BigInteger.valueOf(price),now,remark).send();
 
         //TransactionReceipt receipt = contractService.getPetMarketContract().sellPet(new BigInteger(petId),BigInteger.valueOf(price),now).send();
@@ -81,6 +84,19 @@ public class PetServiceImpl implements PetService {
             e.printStackTrace();
         }
         return petList;
+    }
+
+    @Override
+    public List<Pet> getMyPets() {
+        try {
+            List<BigInteger> petIndexs = contractService.getPetMarketContract().getMyPets().send();
+            List<Pet> petList = petStoreService.getPetsByPetId(petIndexs);
+            return petList;
+        } catch (Exception e) {
+            log.info("获取个人宠物列表失败！！！");
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 
     @Override

@@ -89,7 +89,7 @@ public class PetStoreService {
             pet.setImgUrl(pet_tuple2.getValue2());
             pet.setRemark(pet_tuple2.getValue4());
             // 获取owner地址
-            String ownerAddress = contractService.getPetMarketContract().petOwner(contractService.getAccountContract().myAddress().send() , BigInteger.valueOf(petIndex)).send();
+            String ownerAddress = contractService.getPetMarketContract().petOwner("0x7f99c0c7cd0913e32c1eac9a5337f1c727c20cbf", BigInteger.valueOf(petIndex)).send();
             if (ownerAddress!=null){
                 User owner = userRepository.findByAddress(ownerAddress);
                 owner.setCredit(contractService.getAccountContract().balanceOf(ownerAddress).send().intValue());

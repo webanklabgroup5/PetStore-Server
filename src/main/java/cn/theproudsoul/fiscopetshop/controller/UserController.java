@@ -1,5 +1,6 @@
 package cn.theproudsoul.fiscopetshop.controller;
 
+import cn.theproudsoul.fiscopetshop.constants.JSONReturn;
 import cn.theproudsoul.fiscopetshop.entity.Applicant;
 import cn.theproudsoul.fiscopetshop.entity.Pet;
 import cn.theproudsoul.fiscopetshop.entity.User;
@@ -232,8 +233,9 @@ public class UserController{
 	@GetMapping(value = "/market/userlist", produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String sellers(@RequestParam(value="limit",required = false,defaultValue = "10") int limit,
-						  @RequestParam(value="offset",required = false,defaultValue = "0") int offset)
-	{
+						  @RequestParam(value="offset",required = false,defaultValue = "0") int offset) {
+        if (!contractService.isAdmin())
+            return JSONReturn.PERMISSIONDENIED();
 		// 获取卖家
 		JSONObject res = new JSONObject();
 		List<User> users = userService.sellers();
