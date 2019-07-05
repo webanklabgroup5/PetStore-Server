@@ -29,10 +29,17 @@ contract PetMarket is ParallelContract{
         admin = msg.sender;
     }
     
-    function petOwner(uint _petId) public view returns (address){
-        require(msg.sender == admin, "require admin permission!");
+    function petOwner(address _sender, uint _petId) public view returns (address){
+        require(_sender == admin, "require admin permission!");
         return petToOwner[_petId];
     }
+
+	function petCount() public view returns(uint) {
+		require(msg.sender == admin, "require admin permission");
+		return pets.length;
+	}
+
+	
     
     function newPet(string _name, uint16 _species, string _bday, 
                     string _disc, string _picUrl) public {
@@ -137,7 +144,7 @@ contract PetMarket is ParallelContract{
                 string name,
                 string bday
                 ){
-        require(msg.sender == petToOwner[_petId] || msg.sender == admin, "no owner or admin permission!");
+        require(pets[_petId].selling || msg.sender == petToOwner[_petId] || msg.sender == admin, "no owner or admin permission!");
         return (pets[_petId].selling,
                 pets[_petId].species,
                 pets[_petId].price,
@@ -151,7 +158,7 @@ contract PetMarket is ParallelContract{
                 string time,
                 string remark
                 ){
-        require(msg.sender == petToOwner[_petId] || msg.sender == admin, "no owner or admin permission!");
+        require(pets[_petId].selling || msg.sender == petToOwner[_petId] || msg.sender == admin, "no owner or admin permission!");
         return (pets[_petId].disc,
                 pets[_petId].picUrl,
                 pets[_petId].time,
