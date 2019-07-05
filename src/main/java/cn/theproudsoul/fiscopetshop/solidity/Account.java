@@ -77,8 +77,8 @@ public class Account extends Contract {
     public RemoteCall<TransactionReceipt> bonus(String _address, BigInteger _money) {
         final Function function = new Function(
                 FUNC_BONUS, 
-                Arrays.<Type>asList(new Address(_address),
-                new Uint256(_money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_address), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_money)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -86,8 +86,8 @@ public class Account extends Contract {
     public void bonus(String _address, BigInteger _money, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_BONUS, 
-                Arrays.<Type>asList(new Address(_address),
-                new Uint256(_money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_address), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_money)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -95,8 +95,8 @@ public class Account extends Contract {
     public String bonusSeq(String _address, BigInteger _money) {
         final Function function = new Function(
                 FUNC_BONUS, 
-                Arrays.<Type>asList(new Address(_address),
-                new Uint256(_money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_address), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_money)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
@@ -112,7 +112,7 @@ public class Account extends Contract {
         final Function function = new Function(
                 FUNC_REGISTERPARALLELFUNCTION, 
                 Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Utf8String(functionName), 
-                new Uint256(criticalSize)),
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(criticalSize)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -121,7 +121,7 @@ public class Account extends Contract {
         final Function function = new Function(
                 FUNC_REGISTERPARALLELFUNCTION, 
                 Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Utf8String(functionName), 
-                new Uint256(criticalSize)),
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(criticalSize)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -130,14 +130,14 @@ public class Account extends Contract {
         final Function function = new Function(
                 FUNC_REGISTERPARALLELFUNCTION, 
                 Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Utf8String(functionName), 
-                new Uint256(criticalSize)),
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(criticalSize)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
 
     public RemoteCall<BigInteger> balanceOf(String _address) {
         final Function function = new Function(FUNC_BALANCEOF, 
-                Arrays.<Type>asList(new Address(_address)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_address)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
@@ -169,8 +169,8 @@ public class Account extends Contract {
     public RemoteCall<TransactionReceipt> transfer(String to, BigInteger money) {
         final Function function = new Function(
                 FUNC_TRANSFER, 
-                Arrays.<Type>asList(new Address(to),
-                new Uint256(money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(to), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(money)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -178,8 +178,8 @@ public class Account extends Contract {
     public void transfer(String to, BigInteger money, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_TRANSFER, 
-                Arrays.<Type>asList(new Address(to),
-                new Uint256(money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(to), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(money)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -187,8 +187,8 @@ public class Account extends Contract {
     public String transferSeq(String to, BigInteger money) {
         final Function function = new Function(
                 FUNC_TRANSFER, 
-                Arrays.<Type>asList(new Address(to),
-                new Uint256(money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(to), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(money)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
@@ -196,8 +196,8 @@ public class Account extends Contract {
     public RemoteCall<TransactionReceipt> newAccount(String _address, BigInteger _money) {
         final Function function = new Function(
                 FUNC_NEWACCOUNT, 
-                Arrays.<Type>asList(new Address(_address),
-                new Uint256(_money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_address), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_money)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -205,8 +205,8 @@ public class Account extends Contract {
     public void newAccount(String _address, BigInteger _money, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_NEWACCOUNT, 
-                Arrays.<Type>asList(new Address(_address),
-                new Uint256(_money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_address), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_money)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -214,8 +214,8 @@ public class Account extends Contract {
     public String newAccountSeq(String _address, BigInteger _money) {
         final Function function = new Function(
                 FUNC_NEWACCOUNT, 
-                Arrays.<Type>asList(new Address(_address),
-                new Uint256(_money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_address), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_money)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
@@ -302,10 +302,10 @@ public class Account extends Contract {
     public RemoteCall<TransactionReceipt> _transfer(String _sender, String _from, String _to, BigInteger _money) {
         final Function function = new Function(
                 FUNC__TRANSFER, 
-                Arrays.<Type>asList(new Address(_sender),
-                new Address(_from),
-                new Address(_to),
-                new Uint256(_money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_sender), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_from), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_to), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_money)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -313,10 +313,10 @@ public class Account extends Contract {
     public void _transfer(String _sender, String _from, String _to, BigInteger _money, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC__TRANSFER, 
-                Arrays.<Type>asList(new Address(_sender),
-                new Address(_from),
-                new Address(_to),
-                new Uint256(_money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_sender), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_from), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_to), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_money)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -324,10 +324,10 @@ public class Account extends Contract {
     public String _transferSeq(String _sender, String _from, String _to, BigInteger _money) {
         final Function function = new Function(
                 FUNC__TRANSFER, 
-                Arrays.<Type>asList(new Address(_sender),
-                new Address(_from),
-                new Address(_to),
-                new Uint256(_money)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_sender), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_from), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_to), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_money)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }

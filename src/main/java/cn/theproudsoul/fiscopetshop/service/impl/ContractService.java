@@ -33,7 +33,7 @@ public class ContractService {
         return isAdmin;
     }
 
-    private boolean isAdmin;
+    private static boolean isAdmin;
 
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;

@@ -19,11 +19,6 @@ channel-service:
 #user-key:
 #  user-key: 3bed914595c159cbce70ec5fb6aff3d6797e0c5ee5a7a9224a21cae8932d84a4
 
-contract-address:
-  account: 7506f526e04f33f00ac6eedc7b6935786d9caf9c
-  pet-market: 946982993e0eb4b6cebfc1d5ba5d7375a7e824f0
-  transaction: 197d9ec34f74db5dbc9d45a144da858d76497484
-
 spring:
   datasource:
     url: jdbc:mariadb://127.0.0.1:3306/test

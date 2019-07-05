@@ -46,8 +46,7 @@ public class UserController{
 		String password=map.get("password");
 		JSONObject res=new JSONObject();
 		if (((userType != 0)&&(userType!=1)) || (userName == null) || (password == null)){
-			res.put("status",0);
-			res.put("error_msg", "参数错误……");
+			return JSONReturn.INSUFFICIENT_ARGUMENTS();
 		}
 
  		//登录操作checkPassword

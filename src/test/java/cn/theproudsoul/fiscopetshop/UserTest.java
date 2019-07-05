@@ -52,6 +52,5 @@ public class UserTest {
                 .andExpect(jsonPath("$.status", is("1")))
                 .andReturn().getRequest().getSession();
         mockMvc.perform(get("/test").session((MockHttpSession) session)).andDo(print());
-
     }
 }

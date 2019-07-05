@@ -84,7 +84,7 @@ public class Transaction extends Contract {
     public RemoteCall<TransactionReceipt> approveArbitration(BigInteger _recordId) {
         final Function function = new Function(
                 FUNC_APPROVEARBITRATION, 
-                Arrays.<Type>asList(new Uint256(_recordId)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -92,7 +92,7 @@ public class Transaction extends Contract {
     public void approveArbitration(BigInteger _recordId, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_APPROVEARBITRATION, 
-                Arrays.<Type>asList(new Uint256(_recordId)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -100,7 +100,7 @@ public class Transaction extends Contract {
     public String approveArbitrationSeq(BigInteger _recordId) {
         final Function function = new Function(
                 FUNC_APPROVEARBITRATION, 
-                Arrays.<Type>asList(new Uint256(_recordId)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
@@ -108,8 +108,8 @@ public class Transaction extends Contract {
     public RemoteCall<TransactionReceipt> registerParallelFunction(String functionName, BigInteger criticalSize) {
         final Function function = new Function(
                 FUNC_REGISTERPARALLELFUNCTION, 
-                Arrays.<Type>asList(new Utf8String(functionName),
-                new Uint256(criticalSize)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Utf8String(functionName), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(criticalSize)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -117,8 +117,8 @@ public class Transaction extends Contract {
     public void registerParallelFunction(String functionName, BigInteger criticalSize, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_REGISTERPARALLELFUNCTION, 
-                Arrays.<Type>asList(new Utf8String(functionName),
-                new Uint256(criticalSize)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Utf8String(functionName), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(criticalSize)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -126,8 +126,8 @@ public class Transaction extends Contract {
     public String registerParallelFunctionSeq(String functionName, BigInteger criticalSize) {
         final Function function = new Function(
                 FUNC_REGISTERPARALLELFUNCTION, 
-                Arrays.<Type>asList(new Utf8String(functionName),
-                new Uint256(criticalSize)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Utf8String(functionName), 
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(criticalSize)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
@@ -135,8 +135,8 @@ public class Transaction extends Contract {
     public RemoteCall<TransactionReceipt> setPetAndAccntContAddr(String _petContract, String _accountContract) {
         final Function function = new Function(
                 FUNC_SETPETANDACCNTCONTADDR, 
-                Arrays.<Type>asList(new Address(_petContract),
-                new Address(_accountContract)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_petContract), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_accountContract)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -144,8 +144,8 @@ public class Transaction extends Contract {
     public void setPetAndAccntContAddr(String _petContract, String _accountContract, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_SETPETANDACCNTCONTADDR, 
-                Arrays.<Type>asList(new Address(_petContract),
-                new Address(_accountContract)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_petContract), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_accountContract)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -153,8 +153,8 @@ public class Transaction extends Contract {
     public String setPetAndAccntContAddrSeq(String _petContract, String _accountContract) {
         final Function function = new Function(
                 FUNC_SETPETANDACCNTCONTADDR, 
-                Arrays.<Type>asList(new Address(_petContract),
-                new Address(_accountContract)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_petContract), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_accountContract)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
@@ -162,7 +162,7 @@ public class Transaction extends Contract {
     public RemoteCall<TransactionReceipt> unregisterParallelFunction(String functionName) {
         final Function function = new Function(
                 FUNC_UNREGISTERPARALLELFUNCTION, 
-                Arrays.<Type>asList(new Utf8String(functionName)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Utf8String(functionName)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -170,7 +170,7 @@ public class Transaction extends Contract {
     public void unregisterParallelFunction(String functionName, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_UNREGISTERPARALLELFUNCTION, 
-                Arrays.<Type>asList(new Utf8String(functionName)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Utf8String(functionName)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -178,7 +178,7 @@ public class Transaction extends Contract {
     public String unregisterParallelFunctionSeq(String functionName) {
         final Function function = new Function(
                 FUNC_UNREGISTERPARALLELFUNCTION, 
-                Arrays.<Type>asList(new Utf8String(functionName)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Utf8String(functionName)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
@@ -186,8 +186,8 @@ public class Transaction extends Contract {
     public RemoteCall<TransactionReceipt> denyArbitration(BigInteger _recordId, String _reason) {
         final Function function = new Function(
                 FUNC_DENYARBITRATION, 
-                Arrays.<Type>asList(new Uint256(_recordId),
-                new Utf8String(_reason)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId), 
+                new org.fisco.bcos.web3j.abi.datatypes.Utf8String(_reason)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -195,8 +195,8 @@ public class Transaction extends Contract {
     public void denyArbitration(BigInteger _recordId, String _reason, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_DENYARBITRATION, 
-                Arrays.<Type>asList(new Uint256(_recordId),
-                new Utf8String(_reason)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId), 
+                new org.fisco.bcos.web3j.abi.datatypes.Utf8String(_reason)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -204,8 +204,8 @@ public class Transaction extends Contract {
     public String denyArbitrationSeq(BigInteger _recordId, String _reason) {
         final Function function = new Function(
                 FUNC_DENYARBITRATION, 
-                Arrays.<Type>asList(new Uint256(_recordId),
-                new Utf8String(_reason)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId), 
+                new org.fisco.bcos.web3j.abi.datatypes.Utf8String(_reason)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
@@ -213,12 +213,12 @@ public class Transaction extends Contract {
     public RemoteCall<TransactionReceipt> makePurchase(String _sender, String _buyer, String _seller, BigInteger _price, BigInteger _petId, String _time) {
         final Function function = new Function(
                 FUNC_MAKEPURCHASE, 
-                Arrays.<Type>asList(new Address(_sender),
-                new Address(_buyer),
-                new Address(_seller),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_sender), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_buyer), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_seller), 
                 new org.fisco.bcos.web3j.abi.datatypes.generated.Uint32(_price), 
-                new Uint256(_petId),
-                new Utf8String(_time)),
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_petId), 
+                new org.fisco.bcos.web3j.abi.datatypes.Utf8String(_time)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -226,12 +226,12 @@ public class Transaction extends Contract {
     public void makePurchase(String _sender, String _buyer, String _seller, BigInteger _price, BigInteger _petId, String _time, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_MAKEPURCHASE, 
-                Arrays.<Type>asList(new Address(_sender),
-                new Address(_buyer),
-                new Address(_seller),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_sender), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_buyer), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_seller), 
                 new org.fisco.bcos.web3j.abi.datatypes.generated.Uint32(_price), 
-                new Uint256(_petId),
-                new Utf8String(_time)),
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_petId), 
+                new org.fisco.bcos.web3j.abi.datatypes.Utf8String(_time)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -239,12 +239,12 @@ public class Transaction extends Contract {
     public String makePurchaseSeq(String _sender, String _buyer, String _seller, BigInteger _price, BigInteger _petId, String _time) {
         final Function function = new Function(
                 FUNC_MAKEPURCHASE, 
-                Arrays.<Type>asList(new Address(_sender),
-                new Address(_buyer),
-                new Address(_seller),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.Address(_sender), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_buyer), 
+                new org.fisco.bcos.web3j.abi.datatypes.Address(_seller), 
                 new org.fisco.bcos.web3j.abi.datatypes.generated.Uint32(_price), 
-                new Uint256(_petId),
-                new Utf8String(_time)),
+                new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_petId), 
+                new org.fisco.bcos.web3j.abi.datatypes.Utf8String(_time)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }
@@ -321,7 +321,7 @@ public class Transaction extends Contract {
 
     public RemoteCall<Tuple7<String, String, BigInteger, BigInteger, BigInteger, String, String>> getRecordById(BigInteger _recordId) {
         final Function function = new Function(FUNC_GETRECORDBYID, 
-                Arrays.<Type>asList(new Uint256(_recordId)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Utf8String>() {}, new TypeReference<Utf8String>() {}));
         return new RemoteCall<Tuple7<String, String, BigInteger, BigInteger, BigInteger, String, String>>(
                 new Callable<Tuple7<String, String, BigInteger, BigInteger, BigInteger, String, String>>() {
@@ -358,8 +358,8 @@ public class Transaction extends Contract {
     public RemoteCall<TransactionReceipt> requestArbitration(BigInteger _recordId, String _reason) {
         final Function function = new Function(
                 FUNC_REQUESTARBITRATION, 
-                Arrays.<Type>asList(new Uint256(_recordId),
-                new Utf8String(_reason)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId), 
+                new org.fisco.bcos.web3j.abi.datatypes.Utf8String(_reason)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
@@ -367,8 +367,8 @@ public class Transaction extends Contract {
     public void requestArbitration(BigInteger _recordId, String _reason, TransactionSucCallback callback) {
         final Function function = new Function(
                 FUNC_REQUESTARBITRATION, 
-                Arrays.<Type>asList(new Uint256(_recordId),
-                new Utf8String(_reason)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId), 
+                new org.fisco.bcos.web3j.abi.datatypes.Utf8String(_reason)), 
                 Collections.<TypeReference<?>>emptyList());
         asyncExecuteTransaction(function, callback);
     }
@@ -376,8 +376,8 @@ public class Transaction extends Contract {
     public String requestArbitrationSeq(BigInteger _recordId, String _reason) {
         final Function function = new Function(
                 FUNC_REQUESTARBITRATION, 
-                Arrays.<Type>asList(new Uint256(_recordId),
-                new Utf8String(_reason)),
+                Arrays.<Type>asList(new org.fisco.bcos.web3j.abi.datatypes.generated.Uint256(_recordId), 
+                new org.fisco.bcos.web3j.abi.datatypes.Utf8String(_reason)), 
                 Collections.<TypeReference<?>>emptyList());
         return createTransactionSeq(function);
     }

@@ -97,7 +97,7 @@ public class TransactionController {
                            @RequestParam(value="offset",required = false,defaultValue = "0") int offset){
         JSONObject res = new JSONObject();
         List<Order> orderList= transactionService.getAllOrders();
-        if (orderList==null){
+        if (!contractService.isAdmin()){
             return JSONReturn.PERMISSIONDENIED();
         }
         int total = orderList.size();
@@ -106,7 +106,6 @@ public class TransactionController {
             res.put("status",1);
             res.put("trade_list", new JSONArray());
         } else if (offset>total){
-
             return JSONReturn.NOTFOUND();
         }
         if (limit+offset>total)

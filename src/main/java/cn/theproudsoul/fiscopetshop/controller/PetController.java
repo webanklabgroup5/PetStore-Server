@@ -2,18 +2,15 @@ package cn.theproudsoul.fiscopetshop.controller;
 
 import cn.theproudsoul.fiscopetshop.constants.JSONReturn;
 import cn.theproudsoul.fiscopetshop.entity.Pet;
-import cn.theproudsoul.fiscopetshop.entity.ReturnJson;
 import cn.theproudsoul.fiscopetshop.service.PetService;
 import cn.theproudsoul.fiscopetshop.service.impl.ContractService;
 import cn.theproudsoul.fiscopetshop.service.impl.PetStoreService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +24,8 @@ public class PetController {
     private final PetService petService;
     private final PetStoreService petStoreService;
     private final ContractService contractService;
-    private String basePath="D:\\academic\\shixun\\PetStore-Server\\pic\\"; // 图片储存根目录
-    // private String basePath="/home/petshop/pet/"; // 图片储存根目录
+    //private String basePath="D:\\academic\\shixun\\PetStore-Server\\pic\\"; // 图片储存根目录
+    private String basePath="/home/petshop/pet/"; // 图片储存根目录
     private String accessUrl = "http://ali.theproudsoul.cn:22222/petshop/pet/";
 
     public PetController(PetService petService, PetStoreService petStoreService, ContractService contractService) {
